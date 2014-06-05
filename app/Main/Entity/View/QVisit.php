@@ -12,7 +12,7 @@ namespace Main\Entity\View;
  * @Entity
  * @Table(name="q_visit")
  */
-class QVisit {
+class QVisit extends BaseEntity {
     /**
      * @Id
      * @Column(type="integer")
@@ -37,7 +37,7 @@ class QVisit {
     /** @Column(type="date") */
     protected $date;
 
-    /** @Column(type="time") */
+    /** @Column(type="string") */
     protected $time;
 
     /** @Column(type="boolean") */
@@ -172,12 +172,5 @@ class QVisit {
     public function getVnId()
     {
         return $this->vn_id;
-    }
-
-
-
-
-    public function toArray(){
-        return get_object_vars($this);
     }
 } 

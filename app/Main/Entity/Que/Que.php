@@ -19,7 +19,7 @@ class Que extends BaseEntity {
     /** @Column(type="integer") */
     protected $hn_id;
 
-    /** @Column(type="integer") */
+    /** @Column(type="string") */
     protected $p_name;
 
     /** @Column(type="string") */

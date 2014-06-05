@@ -10,6 +10,7 @@ namespace Main\Entity\Que;
 
 /**
  * @MappedSuperclass
+ * @HasLifecycleCallbacks
  */
 class BaseEntity {
     /**
@@ -58,19 +59,17 @@ class BaseEntity {
     }
 
     /** @PrePersist */
-    public function prePersist(BaseEntity $entity){
-        $now = new \DateTime();
-        $entity->setCreatedAt($now);
+    public function doStuffOnPrePersist(){
+        $now = new \DateTime("now");
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
     }
 
     /** @PreUpdate */
-    public function preUpdate(BaseEntity $entity){
-        $now = new \DateTime();
-        $entity->setUpdatedAt($now);
+    public function doStuffOnPreUpdate(){
+        $now = new \DateTime("now");
+        $this->setUpdatedAt($now);
     }
-
-
-
 
     public function toArray(){
         return get_object_vars($this);
