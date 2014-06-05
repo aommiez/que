@@ -8,6 +8,23 @@
 require_once 'bootstrap.php';
 
 $_page = isset($_GET['page'])? $_GET['page']: 'index';
-include '_template/header.php';
-include 'page/'.$_page.'.php';
-include '_template/footer.php';
+
+class View{
+	public static $template = '_template';
+	static function render($_page, $template_dir = null){
+
+		if ($template_dir===null) {
+			$template_dir = View::$template;
+		}
+
+		include $template_dir.'/header.php';
+		include 'page/'.$_page.'.php';
+		include $template_dir.'/footer.php';
+	}
+}
+
+if ($_page!=='index') {
+	View::render($_page);
+}else{
+	View::render($_page, '_template_login');
+}
