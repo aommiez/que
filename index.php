@@ -31,7 +31,8 @@ class View{
 if ($_page=='index') {
 	View::render($_page, '_template_login');
 }else if($_page=='user/scan'
-	OR $_page=='user/show'){
+	OR $_page=='user/show'
+	OR $_page=='user/call'){
 	View::render($_page, '_template_blank');
 }else{
 	View::render($_page);
