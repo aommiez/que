@@ -19,12 +19,18 @@
 <div class='row-fluid'>
     <div class='span12 box'>
         <div class="box-content">
-            <form class="form form-horizontal" method="post" action="" style="margin: 0;">
+            <script type="text/javascript">
+                $(function(){
+                    $('#form-scan').submit(function(){
+                        window.open('index.php?page=user/scan', '', 'width=300, height=100, top=0');
+                    });
+                });
+            </script>
+            <form id="form-scan" class="form form-horizontal" method="post" action="" style="margin: 0;">
                 <input type="text" name="search" style="margin: 0;">
                 <button class="btn">Search</button>
-                <a class="btn" href="#" onclick="window.open('', '', 'width=200, height=100');">Show User List</a>
+                <a class="btn" href="#" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">Show User List</a>
             </form>
-            
         </div>
         <div class='box-header red-background'>
             <div class='title'>User queue</div>

@@ -10,21 +10,30 @@ require_once 'bootstrap.php';
 $_page = isset($_GET['page'])? $_GET['page']: 'index';
 
 class View{
-	public static $template = '_template';
-	static function render($_page, $template_dir = null){
+	
+	static function render($_page, $template_dir = '_template'){
 
-		if ($template_dir===null) {
-			$template_dir = View::$template;
+		// Detect AJAX Request
+		$no_template = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='xmlhttprequest') ? true : false ;
+		if ($no_template===false) {
+			include $template_dir.'/header.php';
 		}
-
-		include $template_dir.'/header.php';
+		
 		include 'page/'.$_page.'.php';
-		include $template_dir.'/footer.php';
+
+		if ($no_template===false) {
+			include $template_dir.'/footer.php';
+		}
+		
 	}
 }
 
-if ($_page!=='index') {
-	View::render($_page);
-}else{
+if ($_page=='index') {
 	View::render($_page, '_template_login');
+}else if($_page=='user/scan'
+	OR $_page=='user/show'
+	OR $_page=='user/call'){
+	View::render($_page, '_template_blank');
+}else{
+	View::render($_page);
 }
