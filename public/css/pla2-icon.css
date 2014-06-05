@@ -1,0 +1,88 @@
+/**
+ * Custom Icon
+ */
+[class^="pla2-icon-"],
+[class^="pla2-left-"]{
+	display: inline-block;
+	line-height: normal;
+	background-position: 0% 0%;
+	margin-top: 0;
+
+	
+	background-repeat: no-repeat;
+	vertical-align: middle;
+    margin-right: 10px;
+}
+.pla2-icon-menu{
+    background-image: url('../img/menu/Menu_button_on@2x.png');
+    background-size: 24px auto;
+    width: 24px;
+	height: 24px;
+}
+.pla2-icon-member{
+    background-image: url('../img/menu/Member_button_on@2x.png');
+    background-size: 24px auto;
+    width: 24px;
+	height: 24px;
+}
+.pla2-icon-contact{
+    background-image: url('../img/menu/Contact_button_on@2x.png');
+    background-size: 24px auto;
+    width: 24px;
+	height: 24px;
+}
+.pla2-icon-update{
+    background-image: url('../img/menu/Update_button_on@2x.png');
+    background-size: 24px auto;
+    width: 24px;
+	height: 24px;
+}
+
+/* Left Menu */
+.pla2-left-menu{
+    background-image: url('../img/menu/Menu_button_on@2x.png');
+    background-size: 20px auto;
+    width: 25px;
+	height: 20px;
+	background-position: center;
+}
+.active .pla2-left-menu,
+li:hover .pla2-left-menu{
+    background-image: url('../img/menu/Menu_button_on@2x_red.png');
+}
+
+.pla2-left-member{
+    background-image: url('../img/menu/Member_button_on@2x.png');
+    background-size: 20px auto;
+    width: 25px;
+	height: 20px;
+	background-position: center;
+}
+.active .pla2-left-member,
+li:hover .pla2-left-member{
+    background-image: url('../img/menu/Member_button_on@2x_red.png');
+}
+
+.pla2-left-contact{
+    background-image: url('../img/menu/Contact_button_on@2x.png');
+    background-size: 20px auto;
+    width: 25px;
+	height: 20px;
+	background-position: center;
+}
+.active .pla2-left-contact,
+li:hover .pla2-left-contact{
+    background-image: url('../img/menu/Contact_button_on@2x_red.png');
+}
+
+.pla2-left-update{
+    background-image: url('../img/menu/Update_button_on@2x.png');
+    background-size: 20px auto;
+    width: 25px;
+	height: 20px;
+	background-position: center;
+}
+.active .pla2-left-update,
+li:hover .pla2-left-update{
+    background-image: url('../img/menu/Update_button_on@2x_red.png');
+}

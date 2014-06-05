@@ -1,0 +1,12 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: p2
+ * Date: 6/5/14
+ * Time: 10:15 AM
+ */
+
+require_once "vendor/autoload.php";
+require_once "lib/base.php";
+require_once "lib/Local.php";
+
