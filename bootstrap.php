@@ -9,4 +9,6 @@
 require_once "vendor/autoload.php";
 require_once "lib/base.php";
 require_once "lib/Local.php";
+require_once "app/Main/Autoloader.php";
 
+\Main\Autoloader::register();
