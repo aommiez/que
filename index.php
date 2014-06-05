@@ -14,7 +14,7 @@ class View{
 	static function render($_page, $template_dir = '_template'){
 
 		// Detect AJAX Request
-		$no_template = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='xmlhttprequest') ? true : false ;
+		$no_template = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') ? true : false ;
 		if ($no_template===false) {
 			include $template_dir.'/header.php';
 		}

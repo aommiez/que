@@ -9,7 +9,7 @@
     <script src='assets/javascripts/html5shiv.js' type='text/javascript'></script>
     <![endif]-->
     <link href='<?php echo asset('public/assets/stylesheets/bootstrap/bootstrap.css');?>' media='all' rel='stylesheet' type='text/css' />
-    <link href='<?php echo asset('public/assets/stylesheets/bootstrap/bootstrap-responsive.css');?>' media='all' rel='stylesheet' type='text/css' />
+    <?php /* <link href='<?php echo asset('public/assets/stylesheets/bootstrap/bootstrap-responsive.css');?>' media='all' rel='stylesheet' type='text/css' /> */ ?>
     <!-- / jquery ui -->
     <link href='<?php echo asset('public/assets/stylesheets/jquery_ui/jquery-ui-1.10.0.custom.css');?>' media='all' rel='stylesheet' type='text/css' />
     <link href='<?php echo asset('public/assets/stylesheets/jquery_ui/jquery.ui.1.10.0.ie.css');?>' media='all' rel='stylesheet' type='text/css' />

@@ -1,46 +1,35 @@
-<div class='row-fluid'>
-    <div class='span12 box'>
-        <div class="box-content">
-        	<table class='table table-bordered table-hover table-striped' style='margin-bottom:0;'>
-                <tbody>
-                <tr>
-                	<td><div class="text-center">1</div></td>
-                    <td>User name 1</td>
-                    <td><div class="text-center">OPD 1</div></td>
-                </tr>
-                <tr>
-                	<td><div class="text-center">2</div></td>
-                    <td>User name 2</td>
-                    <td><div class="text-center">OPD 2</div></td>
-                </tr>
-                <tr>
-                	<td><div class="text-center">3</div></td>
-                    <td>User name 3</td>
-                    <td><div class="text-center">OPD 3</div></td>
-                </tr>
-                <tr>
-                	<td><div class="text-center">4</div></td>
-                    <td>User name 4</td>
-                    <td><div class="text-center">OPD 1</div></td>
-                </tr>
-                <tr>
-                	<td><div class="text-center">5</div></td>
-                    <td>User name 5</td>
-                    <td><div class="text-center">OPD 2</div></td>
-                </tr>
-                <tr>
-                	<td><div class="text-center">6</div></td>
-                    <td>User name 6</td>
-                    <td><div class="text-center">OPD 3</div></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<style type="text/css">
+.que {
+    line-height: 44px;
+}
+.que-vn_id {
+    padding: 0 10px;
+}
+</style>
+<div class='row-fluid show-que'>
 </div>
+<script type="text/javascript">
+$(function(){
+    var wrap = $('.show-que');
+    function createRow(item){
+        var el = $('<div class="que box box-bordered"></div>');
+        el.append('<div class="span4 que-vn_id">'+item.vn_id+'</div>');
+        el.append('<div class="span4 que-name">'+item.p_name+' '+item.p_surname+'</div>');
+        el.append('<div class="clearfix"></div>');
+        return el;
+    }
 
-
-
-
-
-
+    function pull(lastId){
+        $.get('index.php?page=pull/show', {last_id: lastId}, function(json){
+            if(json.update){
+                for(i in json.data){
+                    wrap.append(createRow(json.data[i]));
+                }
+                lastId = json.last_id;
+            }
+            pull(lastId);
+        }, 'json');
+    }
+    pull(0);
+});
+</script>

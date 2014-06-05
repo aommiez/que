@@ -36,7 +36,8 @@ class Local {
             'driver'   => 'pdo_mysql',
             'user'     => 'root',
             'password' => '111111',
-            'dbname'   => 'que'
+            'dbname'   => 'que',
+            'charset'  => 'utf8'
         ), $config);
     }
 
