@@ -1,7 +1,3 @@
-<link href="public/assets/stylesheets/bootstrap/bootstrap.css" media="all" rel="stylesheet" type="text/css">
-<link href="public/assets/stylesheets/bootstrap/bootstrap-responsive.css" media="all" rel="stylesheet" type="text/css">
-
-<link href="public/assets/stylesheets/light-theme.css" id="color-settings-body-color" media="all" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 function alert_call(thiswindow){
     var newwindow = window.open('', '', 'width=200, height=200, top=300, left=500');
