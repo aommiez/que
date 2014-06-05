@@ -16,10 +16,17 @@ class View{
 		if ($template_dir===null) {
 			$template_dir = View::$template;
 		}
-
-		include $template_dir.'/header.php';
+		$no_template = isset($_GET['skip']) ? true : false ;
+		if ($no_template===false) {
+			include $template_dir.'/header.php';
+		}
+		
 		include 'page/'.$_page.'.php';
-		include $template_dir.'/footer.php';
+
+		if ($no_template===false) {
+			include $template_dir.'/footer.php';
+		}
+		
 	}
 }
 
