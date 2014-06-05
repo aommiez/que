@@ -170,7 +170,7 @@
             <div class='container-fluid'>
                 <a class='brand' href='#'>
                     <i class='icon-coffee'></i>
-                    <span class='hidden-phone'>Mingmitr Coffee</span>
+                    <span class='hidden-phone'>Hospital Queue</span>
                 </a>
                 <a class='toggle-nav btn pull-left' href='#'>
                     <i class='icon-reorder'></i>
@@ -211,13 +211,13 @@
                 <li class=''>
                     <a href='#'>
                         <i class='icon-file-alt'></i>
-                        <span>Menu2</span>
+                        <span>Administrator</span>
                     </a>
                 </li>
                 <li class=''>
                     <a href='#'>
                         <i class='icon-file-alt'></i>
-                        <span>Menu3</span>
+                        <span>Apps Setting</span>
                     </a>
                 </li>
             </ul>
