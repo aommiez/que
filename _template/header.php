@@ -209,8 +209,8 @@
                     </a>
                 </li>
                 <li class=''>
-                    <a href='#'>
-                        <i class='icon-file-alt'></i>
+                    <a href='index.php?page=user/list'>
+                        <i class='icon-group'></i>
                         <span>Administrator</span>
                     </a>
                 </li>
