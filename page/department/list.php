@@ -44,6 +44,9 @@
                             <td>ODP 1, ODP 2</td>
                             <td>
                                 <div class='text-center'>
+                                    <a class='btn btn-success btn-mini' href='javascript:void(0);' title="List" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">
+                                        <i class='icon-list'></i>
+                                    </a>
                                     <a class='btn btn-success btn-mini' href='#' title="Edit">
                                         <i class='icon-pencil'></i>
                                     </a>
@@ -58,6 +61,9 @@
                             <td>ER</td>
                             <td>
                                 <div class='text-center'>
+                                    <a class='btn btn-success btn-mini' href='javascript:void(0);' title="List" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">
+                                        <i class='icon-list'></i>
+                                    </a>
                                     <a class='btn btn-success btn-mini' href='#' title="Edit">
                                         <i class='icon-pencil'></i>
                                     </a>

@@ -16,30 +16,39 @@
 
     </div>
 </div>
+<div class="row-fluid">
+    <div class="box-content">
+        <script type="text/javascript">
+            $(function(){
+                $('#form-scan').submit(function(){
+                    window.open('index.php?page=user/scan', '', 'width=300, height=100, top=0');
+                });
+            });
+
+            $(window).keydown(function(e) {
+                if (e.keyCode == 120) {
+                    $("#search").focus();
+                }
+            });
+
+
+        </script>
+        <form id="form-scan" class="form pull-left" method="post" action="" style="margin: 0;">
+            <input type="text" name="search" style="margin: 0;" id="search">
+            <button class="btn">Search</button>
+            <a class="btn" href="#" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">Show User List</a>
+        </form>
+        <div class="pull-right">
+            <span>Select Department</span>
+            <select id="inputSelect">
+                <option>OPD 1</option>
+                <option>OPD 2</option>
+            </select>
+        </div>
+    </div>
+</div>
 <div class='row-fluid'>
     <div class='span12 box'>
-        <div class="box-content">
-            <script type="text/javascript">
-                $(function(){
-                    $('#form-scan').submit(function(){
-                        window.open('index.php?page=user/scan', '', 'width=300, height=100, top=0');
-                    });
-                });
-
-                $(window).keydown(function(e) {
-                    if (e.keyCode == 120) {
-                        $("#search").focus();
-                    }
-                });
-
-
-            </script>
-            <form id="form-scan" class="form form-horizontal" method="post" action="" style="margin: 0;">
-                <input type="text" name="search" style="margin: 0;" id="search">
-                <button class="btn">Search</button>
-                <a class="btn" href="#" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">Show User List</a>
-            </form>
-        </div>
         <div class='box-header red-background'>
             <div class='title'>User queue</div>
         </div>
