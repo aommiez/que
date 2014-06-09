@@ -30,8 +30,6 @@ foreach($items as $item){
     $que = new Main\Entity\Que\Que();
     $que->setId($item->getVnId());
     $que->setVnId($item->getVnId());
-    $que->setComplete(false);
-    $que->setSkip(false);
     $que->setDate($item->getDate());
     $que->setTime(new DateTime($item->getTime().":00"));
     $que->setHnId($item->getHnId());

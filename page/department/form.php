@@ -11,7 +11,7 @@
 <div class='row-fluid'>
     <div class='span12 box'>
         <div class='box-header red-background'>
-            <div class='title'>Add Department</div>
+            <div class='title'>Add Config</div>
         </div>
         <div class='box-content'>
             <form class='form form-horizontal validate-form' method="post" style='margin-bottom: 0;' />

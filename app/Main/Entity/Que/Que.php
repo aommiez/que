@@ -37,26 +37,35 @@ class Que extends BaseEntity {
     /** @Column(type="time") */
     protected $time;
 
-    /** @Column(type="boolean") */
-    protected $complete = false;
+    /** @Column(type="string") */
+    protected $remark = "";
 
     /** @Column(type="boolean") */
     protected $skip = false;
 
+    /** @Column(type="boolean") */
+    protected $hide = false;
+
+    /** @Column(type="boolean") */
+    protected $dru = false;
+
+    /** @Column(type="boolean") */
+    protected $cas = false;
+
     /**
-     * @param mixed $complete
+     * @param mixed $cas
      */
-    public function setComplete($complete)
+    public function setCas($cas)
     {
-        $this->complete = $complete;
+        $this->cas = $cas;
     }
 
     /**
      * @return mixed
      */
-    public function getComplete()
+    public function getCas()
     {
-        return $this->complete;
+        return $this->cas;
     }
 
     /**
@@ -108,6 +117,38 @@ class Que extends BaseEntity {
     }
 
     /**
+     * @param mixed $dru
+     */
+    public function setDru($dru)
+    {
+        $this->dru = $dru;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDru()
+    {
+        return $this->dru;
+    }
+
+    /**
+     * @param mixed $hide
+     */
+    public function setHide($hide)
+    {
+        $this->hide = $hide;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHide()
+    {
+        return $this->hide;
+    }
+
+    /**
      * @param mixed $hn_id
      */
     public function setHnId($hn_id)
@@ -121,22 +162,6 @@ class Que extends BaseEntity {
     public function getHnId()
     {
         return $this->hn_id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -169,6 +194,22 @@ class Que extends BaseEntity {
     public function getPSurname()
     {
         return $this->p_surname;
+    }
+
+    /**
+     * @param mixed $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRemark()
+    {
+        return $this->remark;
     }
 
     /**
@@ -218,6 +259,4 @@ class Que extends BaseEntity {
     {
         return $this->vn_id;
     }
-
-
 }

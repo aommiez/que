@@ -27,6 +27,22 @@ class BaseEntity {
     protected $updated_at;
 
     /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param mixed $created_at
      */
     public function setCreatedAt($created_at)
@@ -69,6 +85,18 @@ class BaseEntity {
     public function doStuffOnPreUpdate(){
         $now = new \DateTime("now");
         $this->setUpdatedAt($now);
+    }
+
+    public function __construct($attr = array()){
+        $this->importAttr($attr);
+    }
+
+    public function importAttr($attr = array()){
+        foreach($attr as $key => $value){
+            if(isset($this->{$key})){
+                $this->{$key} = $value;
+            }
+        }
     }
 
     public function toArray(){
