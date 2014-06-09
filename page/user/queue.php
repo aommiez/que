@@ -1,3 +1,11 @@
+<?php
+$em = Local::getEM();
+$config = $em->getRepository('Main\Entity\Que\Config')->find($_GET['id']);
+$deps_id = json_decode($config->getDepsId());
+$qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
+$qb->where('a.skip=0')
+    ->andWhere($qb->expr()->in('a.dep_id', $deps_id));
+?>
 <div class='row-fluid'>
     <div class='span12'>
         <div class='page-header'>
@@ -13,7 +21,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <div class="row-fluid">
@@ -119,13 +126,9 @@
                         Save
                     </button>
                 </div>
-
-                
             </form>
-            
         </div>
     </div>
-
 </div>
 
 <div class="row-fluid">
@@ -212,10 +215,6 @@
                     <div class="tab-pane active" id="showUsers">
                         <div class='responsive-table'>
                             <div class='scrollable-area'>
-                                <?php 
-                                $em = Local::getEM();
-                                var_dump($em);
-                                ?>
                                 <table class='table table-bordered table-hover table-striped' style='margin-bottom:0;'>
                                     <thead>
                                     <tr>
@@ -248,9 +247,10 @@
                                                     <i class='icon-remove'></i>
                                                     Hide
                                                 </a>
+                                                <input type="text" placeholder="Remark">
                                                 <a class='btn btn-info' href='#'>
                                                     <i class='icon-info'></i>
-                                                    Remark
+                                                    Save
                                                 </a>
                                             </div>
                                         </td>
@@ -284,7 +284,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="tab-pane " id="hideUsers">
                         <div class='responsive-table'>
                             <div class='scrollable-area'>

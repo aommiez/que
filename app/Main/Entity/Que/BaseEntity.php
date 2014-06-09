@@ -93,7 +93,7 @@ class BaseEntity {
 
     public function importAttr($attr = array()){
         foreach($attr as $key => $value){
-            if(isset($this->{$key})){
+            if(property_exists($this, $key)){
                 $this->{$key} = $value;
             }
         }

@@ -1,3 +1,7 @@
+<?php
+$em = Local::getEM();
+$em->getRepository('Main\Entity\Que');
+?>
 <style type="text/css">
 .que {
     line-height: 44px;

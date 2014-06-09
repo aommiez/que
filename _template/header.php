@@ -178,8 +178,10 @@
                 <ul class='nav pull-right'>
                     <li class='dropdown dark user-menu'>
                         <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                            <!--
                             <img alt='Mila Kunis' height='23' src='<?php //echo $user_data['picture']['link'];?>?width=23' width='23' />
-                            <span class='user-name hidden-phone'><?php //echo $user_data['display_name'];?> </span>
+                            -->
+                            <span class='user-name hidden-phone'>Menu<?php //echo $user_data['display_name'];?> </span>
                             <b class='caret'></b>
                         </a>
                         <ul class='dropdown-menu'>
