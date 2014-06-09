@@ -173,4 +173,38 @@ class QVisit extends BaseEntity {
     {
         return $this->vn_id;
     }
+
+    /**
+     * @param mixed $cas
+     */
+    public function setCas($cas)
+    {
+        $this->cas = $cas;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCas()
+    {
+        return $this->cas;
+    }
+
+    /**
+     * @param mixed $dru
+     */
+    public function setDru($dru)
+    {
+        $this->dru = $dru;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDru()
+    {
+        return $this->dru;
+    }
+
+
 } 

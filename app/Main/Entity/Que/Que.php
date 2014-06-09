@@ -44,6 +44,9 @@ class Que extends BaseEntity {
     protected $skip = false;
 
     /** @Column(type="boolean") */
+    protected $skip_dru = false;
+
+    /** @Column(type="boolean") */
     protected $hide = false;
 
     /** @Column(type="boolean") */
