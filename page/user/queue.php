@@ -4,7 +4,27 @@ $config = $em->getRepository('Main\Entity\Que\Config')->find($_GET['id']);
 $deps_id = json_decode($config->getDepsId());
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb->where('a.skip=0')
-    ->andWhere($qb->expr()->in('a.dep_id', $deps_id));
+    ->andWhere($qb->expr()->in('a.dep_id', $deps_id))
+    ->andWhere('a.skip=0');
+
+$results = $qb->getQuery()->getResult();
+
+$shows = array();
+$hides = array();
+$last_ts = 0;
+foreach($results as $q){
+    /** @var \Main\Entity\Que\Que $q */
+    if($q->getHide()){
+        $hides[] = $q->toArray();
+    }
+    else {
+        $shows[] = $q->toArray();
+    }
+    $dt = $q->getUpdatedAt()->getTimestamp();
+    if($dt > $last_ts){
+        $last_ts = $dt;
+    }
+}
 ?>
 <div class='row-fluid'>
     <div class='span12'>
@@ -222,69 +242,51 @@ $qb->where('a.skip=0')
                                             <input type="checkbox" title="Check/Uncheck All">
                                         </th>
                                         <th>
-                                            User name
+                                            HN ID
+                                        </th>
+                                        <th>
+                                            name
                                         </th>
                                         <th>
                                             <div class="text-center">Action</div>
                                         </th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
+                                    <tbody class="show-queue-list">
+                                    <?php foreach($shows as $item){?>
+                                    <tr class="que-tr" vn_id="<?php echo $item['vn_id'];?>">
                                         <td><input type="checkbox" name="id[]"></td>
-                                        <td>User name 1</td>
+                                        <td><?php echo $item['hn_id'];?></td>
+                                        <td><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success' href='#'>
                                                     <i class='icon-bullhorn'></i>
                                                     Call
                                                 </a>
-                                                <a class='btn' href='#'>
+                                                <a class='btn skip-btn' href='index.php?page=user/skip&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-mail-forward'></i>
                                                     Skip
                                                 </a>
-                                                <a class='btn btn-danger' href='#'>
+                                                <a class='btn btn-danger hide-btn' href='index.php?page=user/hide&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-remove'></i>
-                                                    Hide
+                                                    <span>Hide</span>
                                                 </a>
-                                                <input type="text" placeholder="Remark">
-                                                <a class='btn btn-info' href='#'>
+                                                <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
+                                                <a class='btn btn-info remark-btn' href='index.php?page=user/remark&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-info'></i>
                                                     Save
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td><input type="checkbox" name="id[]"></td>
-                                        <td>User name 2</td>
-                                        <td>
-                                            <div class='text-center'>
-                                                <a class='btn btn-success' href='#'>
-                                                    <i class='icon-bullhorn'></i>
-                                                    Call
-                                                </a>
-                                                <a class='btn' href='#'>
-                                                    <i class='icon-mail-forward'></i>
-                                                    Skip
-                                                </a>
-                                                <a class='btn btn-danger' href='#'>
-                                                    <i class='icon-remove'></i>
-                                                    Hide
-                                                </a>
-                                                <a class='btn btn-info' href='#'>
-                                                    <i class='icon-info'></i>
-                                                    Remark
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php }?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane " id="hideUsers">
+                    <div class="tab-pane" id="hideUsers">
                         <div class='responsive-table'>
                             <div class='scrollable-area'>
                                 <table class='table table-bordered table-hover table-striped' style='margin-bottom:0;'>
@@ -294,62 +296,45 @@ $qb->where('a.skip=0')
                                             <input type="checkbox" title="Check/Uncheck All">
                                         </th>
                                         <th>
-                                            User name
+                                            HN ID
+                                        </th>
+                                        <th>
+                                            name
                                         </th>
                                         <th>
                                             <div class="text-center">Action</div>
                                         </th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
+                                    <tbody class="hide-queue-list">
+                                    <?php foreach($hides as $item){?>
+                                    <tr class="que-tr" vn_id="<?php echo $item['vn_id'];?>">
                                         <td><input type="checkbox" name="id[]"></td>
-                                        <td>User name 3</td>
+                                        <td><?php echo $item['hn_id'];?></td>
+                                        <td><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success' href='#'>
                                                     <i class='icon-bullhorn'></i>
                                                     Call
                                                 </a>
-                                                <a class='btn' href='#'>
+                                                <a class='btn skip-btn' href='index.php?page=user/skip&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-mail-forward'></i>
                                                     Skip
                                                 </a>
-                                                <a class='btn btn-danger' href='#'>
+                                                <a class='btn btn-danger hide-btn' href='index.php?page=user/hide&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-remove'></i>
-                                                    Hide
+                                                    <span>Show</span>
                                                 </a>
-                                                <a class='btn btn-info' href='#'>
+                                                <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
+                                                <a class='btn btn-info remark-btn' href='index.php?page=user/remark&vn_id=<?php echo $item['vn_id'];?>'>
                                                     <i class='icon-info'></i>
-                                                    Remark
+                                                    Save
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td><input type="checkbox" name="id[]"></td>
-                                        <td>User name 4</td>
-                                        <td>
-                                            <div class='text-center'>
-                                                <a class='btn btn-success' href='#'>
-                                                    <i class='icon-bullhorn'></i>
-                                                    Call
-                                                </a>
-                                                <a class='btn' href='#'>
-                                                    <i class='icon-mail-forward'></i>
-                                                    Skip
-                                                </a>
-                                                <a class='btn btn-danger' href='#'>
-                                                    <i class='icon-remove'></i>
-                                                    Hide
-                                                </a>
-                                                <a class='btn btn-info' href='#'>
-                                                    <i class='icon-info'></i>
-                                                    Remark
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -358,13 +343,141 @@ $qb->where('a.skip=0')
                     <!-- END HIDE USER -->
                 </div>
             </div>
-
-
-
-
-                        
-
-
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+$(function(){
+    var last_ts = <?php echo $last_ts;?>;
+    function clickSkip(e){
+        e.preventDefault();
+        var btn = $(this);
+        if(btn.prop('disabled')) return;
+        if(!window.confirm('Skip?')) return;
+
+        btn.prop('disabled', true);
+
+        var tr = btn.closest('tr.que-tr');
+        var vn_id = tr.attr('vn_id');
+        $.post('index.php?page=user/skip', {vn_id: vn_id}, function(data){
+            if(data.success){
+                skip(tr);
+            }
+            btn.prop('disabled', false);
+        }, 'json');
+    }
+
+    function skip(tr){
+        $(tr).fadeOut(function(e){
+            //$(this).remove();
+        });
+    }
+
+    function clickRemark(e){
+        e.preventDefault();
+        var btn = $(this);
+        if(btn.prop('disabled')) return;
+        if(!window.confirm('Remark?')) return;
+        btn.prop('disabled', true);
+
+        var tr = btn.closest('tr.que-tr');
+        var vn_id = tr.attr('vn_id');
+        var input = $('.remark-input', tr);
+        var remarkString = input.val();
+
+        input.prop('disabled', true);
+        $.post('index.php?page=user/remark', {vn_id: vn_id, remark: remarkString}, function(data){
+            if(data.success){
+                //remark(tr, remarkString);
+            }
+            btn.prop('disabled', false);
+            input.prop('disabled', false);
+        }, 'json');
+    }
+
+    function remark(tr, text){
+        $('.remark-input', tr).val(text);
+    }
+
+    function clickHide(e){
+        e.preventDefault();
+        var btn = $(this);
+        if(btn.prop('disabled')) return;
+
+        var tr = btn.closest('tr.que-tr');
+        var vn_id = tr.attr('vn_id');
+        var isHide = $('span', btn).text()=='Show';
+
+        if(!window.confirm('Hide?')) return;
+        btn.prop('disabled', true);
+
+
+        $.post('index.php?page=user/hide', {vn_id: vn_id, hide: (!isHide)? 1: 0}, function(data){
+            if(data.success){
+                //hide(tr, data.hide);
+            }
+            btn.prop('disabled', false);
+        }, 'json');
+    }
+
+    function hide(tr, isHide){
+        var vn_id = tr.attr('vn_id');
+        var text = 'Hide';
+        var table = $('.show-queue-list');
+        if(isHide) {
+            table = $('.hide-queue-list');
+            text = 'Show';
+        }
+
+        var trs = table.find('tr');
+        if(trs.size() == 0){
+            table.append(tr);
+            $('.hide-btn span', tr).text()==text;
+            return;
+        }
+
+        vn_id = parseInt(vn_id);
+        for(var i in trs){
+            if($(trs[i]).attr('vn_id')<vn_id){
+                $(trs[i]).before(tr);
+                break;
+            }
+        }
+        if(i == trs.size()-1){
+            trs[i].after(tr);
+        }
+        $('.hide-btn span', tr).text()==text;
+    }
+
+    function pull(){
+        $.post('index.php?page=pull/user/queue', {last_ts: last_ts}, function(data){
+            last_ts = data.last_ts;
+            $(data.list).each(function(i, obj){
+                var tr =  $('tr[vn_id="'+obj.vn_id+'"]');
+                if(obj.skip==1){
+                    skip(tr);
+                    return;
+                }
+
+                var remarkInput = $('.remark-input', tr);
+                if(remarkInput.val() != obj.remark){
+                    remark(tr, obj.remark);
+                }
+
+                var isHide = $('.hide-btn span', tr).text()=='Show';
+                if(isHide != obj.hide){
+                    hide(tr, obj.hide);
+                }
+            });
+            pull();
+        }, 'json');
+    }
+
+    pull();
+
+    $('.skip-btn').click(clickSkip);
+    $('.remark-btn').click(clickRemark);
+    $('.hide-btn').click(clickHide);
+});
+</script>
