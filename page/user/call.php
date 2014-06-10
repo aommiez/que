@@ -16,12 +16,10 @@ if (!is_file($room_path)) {
 }
 
 $first_name = $item->getPName();
-$firstname_path = 'public/sounds/firstname/'.iconv("utf-8", "tis-620", $first_name ).'.mp3';
+$firstname_path = 'public/sounds/firstname/'.$item->getVnId().'.mp3';
 
 $last_name = $item->getPSurname();
-$lastname_path = 'public/sounds/lastname/'.iconv("utf-8", "tis-620", $last_name ).'.mp3';
-
-
+$lastname_path = 'public/sounds/lastname/'.$item->getVnId().'.mp3';
 
 if (!is_file($firstname_path)) {
 	$fcontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($first_name));
