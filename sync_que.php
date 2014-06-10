@@ -37,8 +37,41 @@ foreach($items as $item){
     $que->setPSurname(tis620_to_utf8($item->getPSurname()));
     $que->setDepId(tis620_to_utf8($item->getDepId()));
     $que->setDepName(tis620_to_utf8($item->getDepName()));
+    $que->setDru($item->getDru());
+    $que->setCas($item->getCas());
 
     $em->persist($que);
+    $em->flush();
+
+    $rs[] = $que->toArray();
+}
+echo json_encode($rs);
+
+$dru_qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
+$dru_qb->select('max(a.vn_id)')->where('a.dru=1');
+
+$dru_max_vn_id = $dru_qb->getQuery()->getSingleScalarResult();
+$dru_max_vn_id = (int)$dru_max_vn_id;
+
+$dru_vqb = $vem->getRepository('Main\Entity\View\QDru')->createQueryBuilder('a');
+$dru_vqb
+    ->where('a.vn_id>:vn_id')
+    ->andWhere($dru_qb->expr()->isNotNull('a.timedru'))
+    ->setParameter('vn_id', $dru_max_vn_id);
+
+$items = $dru_vqb->getQuery()->getResult();
+$rs = array();
+foreach($items as $item){
+    /** @var Main\Entity\View\QDru $item */
+
+    $que = $em->getRepository('Main\Entity\Que\Que')->findOneBy(array('vn_id'=> $item->getVnId()));
+    if(is_null($que)){
+        continue;
+    }
+    $que->setDru(true);
+    //$que->setHide(false);
+
+    $em->merge($que);
     $em->flush();
 
     $rs[] = $que->toArray();
