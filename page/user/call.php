@@ -15,10 +15,10 @@ if (!is_file($room_path)) {
 	fclose($fp);
 }
 
-$first_name = $item->getPName();
+$first_name = iconv("tis-620", "utf-8", $item->getPName() );
 $firstname_path = 'public/sounds/firstname/'.$first_name.'.mp3';
 
-$last_name = $item->getPSurname();
+$last_name = iconv("tis-620", "utf-8", $item->getPSurname() );
 $lastname_path = 'public/sounds/lastname/'.$last_name.'.mp3';
 
 if (!is_file($firstname_path)) {
