@@ -107,6 +107,8 @@ document.getElementById('room').addEventListener('ended', function(){
 document.getElementById('suffix').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
+
+	setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
 </script>
