@@ -168,7 +168,7 @@ foreach($results as $q){
                     <form action="#" method="post" id="formScan">
                         <input type="text" name="search" style="margin: 0;" id="search">
                         <button class="btn">Scan</button>
-                        <a class="btn" href="#" onclick="window.open('index.php?page=user/show', '', 'width=400, height=600');">Show User List</a>
+                        <a class="btn" href="#" onclick="window.open('index.php?page=user/show2&config_id=<?php echo $_GET['id'];?>', '', 'width=400, height=600');">Show User List</a>
                     </form>
                 </div>
                 <div class="span6 text-right">
@@ -260,7 +260,7 @@ foreach($results as $q){
                                         <td><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
-                                                <a class='btn btn-success' href='#'>
+                                                <a class='btn btn-success' href="javascript: window.open('index.php?page=user/call&user_id=2557136', '', 'width=300, height=100, top=0');">
                                                     <i class='icon-bullhorn'></i>
                                                     Call
                                                 </a>
@@ -349,6 +349,7 @@ foreach($results as $q){
 
 <script type="text/javascript">
 $(function(){
+    var deps_id = <?php echo $config->getDepsId();?>;
     var last_ts = <?php echo $last_ts;?>;
     function clickSkip(e){
         e.preventDefault();
@@ -431,27 +432,33 @@ $(function(){
         }
 
         var trs = table.find('tr');
+        console.log(trs);
         if(trs.size() == 0){
             table.append(tr);
-            $('.hide-btn span', tr).text()==text;
+            var btn = $('.hide-btn', tr);
+            $('span', btn).text(text);
             return;
         }
 
         vn_id = parseInt(vn_id);
-        for(var i in trs){
-            if($(trs[i]).attr('vn_id')<vn_id){
-                $(trs[i]).before(tr);
-                break;
+        var i = 0;
+        trs.each(function(index, el){
+            i = index;
+            var $el = $(el);
+            if($el.attr('vn_id') < vn_id){
+                $el.before(tr);
+                return false;
             }
-        }
+        });
+
         if(i == trs.size()-1){
-            trs[i].after(tr);
+            trs.last().after(tr);
         }
-        $('.hide-btn span', tr).text()==text;
+        $('.hide-btn span', tr).text(text);
     }
 
     function pull(){
-        $.post('index.php?page=pull/user/queue', {last_ts: last_ts}, function(data){
+        $.post('index.php?page=pull/user/queue', {last_ts: last_ts, deps_id: deps_id}, function(data){
             last_ts = data.last_ts;
             $(data.list).each(function(i, obj){
                 var tr =  $('tr[vn_id="'+obj.vn_id+'"]');

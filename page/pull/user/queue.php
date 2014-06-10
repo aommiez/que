@@ -10,11 +10,11 @@ $timeOut = 20000000;
 
 
 $rs = array('last_ts'=> $_POST['last_ts'], 'list'=> array());
-
 $em = Local::getEM();
 
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb->where('a.updated_at > :updated_at')
+    ->andWhere($qb->expr()->in('a.dep_id', $_POST['deps_id']))
     ->setParameter('updated_at', date('Y-m-d H:i:s', $_POST['last_ts']));
 
 $time = 0;
