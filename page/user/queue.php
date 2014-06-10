@@ -96,6 +96,20 @@ foreach($results as $q){
                     $('#showScan').slideUp(200);
                 }
             </script>
+            <audio id="sound1" controls style="display:none;">
+                <source src="public/sounds/doorbell-1.wav" type="audio/wav">
+            </audio>
+            <audio id="sound2" controls style="display:none;">
+                <source src="public/sounds/doorbell-2.wav" type="audio/wav">
+            </audio>
+            <script type="text/javascript">
+            $(function(){
+                $('#ding-dong').click(function(){
+                    var sound = $('#soundInput').val();
+                    document.getElementById(sound).play();
+                });
+            });
+            </script>
             <form id="form-scan" class="form form-horizontal validate-form" method="post" action="" style="margin: 0;">
 
                 <div class="control-group">
@@ -103,7 +117,11 @@ foreach($results as $q){
                         <label><i class="icon-bell"></i></label>
                     </div>
                     <div class="controls">
-                        <button class="btn btn-success" name="button" type="submit">กริ่ง</button>
+                        <select id="soundInput">
+                            <option value="sound1">เสียงกริ่งแบบที่ 1</option>
+                            <option value="sound2">เสียงกริ่งแบบที่ 2</option>
+                        </select>
+                        <button id="ding-dong" class="btn btn-success" name="button" type="button">กริ่ง</button>
                     </div>
                 </div>
 
@@ -113,7 +131,7 @@ foreach($results as $q){
                         <small class="muted">คำนำหน้าก่อนเรียกชื่อคน</small>
                     </div>
                     <div class="controls">
-                        <input class="span3" disabled="" id="full-name1" type="text">
+                        <input class="span3" disabled="" id="full-name1" type="text" value="ขอเชิญคุณ">
                     </div>
                 </div>
 
@@ -123,7 +141,7 @@ foreach($results as $q){
                         <small class="muted">คำนำหน้าก่อนเรียกชื่อห้อง</small>
                     </div>
                     <div class="controls">
-                        <input class="span3" disabled="" id="full-name1" type="text">
+                        <input class="span3" disabled="" id="full-name1" type="text" value="ที่ห้อง">
                         <select id="inputSelect">
                             <option>OPD 1</option>
                             <option>OPD 2</option>
@@ -136,7 +154,7 @@ foreach($results as $q){
                         <label for="validation_secret">Suffix</label>
                     </div>
                     <div class="controls">
-                        <input class="span3" disabled="" id="full-name1" type="text">
+                        <input class="span3" disabled="" id="full-name1" type="text" value="ด้วยค่ะ">
                     </div>
                 </div>
 
