@@ -33,6 +33,7 @@ if ($_page=='index') {
 }else if($_page=='user/scan'
     OR $_page=='user/show'
     OR $_page=='user/show2'
+    OR $_page=='user/show2_dru'
 	OR $_page=='user/call'){
 	View::render($_page, '_template_blank');
 }else{

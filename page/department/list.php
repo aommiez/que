@@ -80,11 +80,11 @@ $configs = $em->getRepository('Main\Entity\Que\Config')->findAll();
                         <?php }?>
 
                         <tr>
-                            <td><a href="index.php?page=user/queue">Dru</a></td>
+                            <td><a href="index.php?page=user/queue_dru">Dru</a></td>
                             <td>Dru</td>
                             <td>
                                 <div class='text-center'>
-                                    <a class='btn btn-success btn-mini' href='javascript:void(0);' title="List" onclick="window.open('index.php?page=user/show2', '', 'width=400, height=600');">
+                                    <a class='btn btn-success btn-mini' href='javascript:void(0);' title="List" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height=600');">
                                         <i class='icon-list'></i>
                                     </a>
                                 </div>

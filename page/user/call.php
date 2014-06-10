@@ -16,12 +16,16 @@ if (!is_file($room_path)) {
 }
 
 $first_name = $item->getPName();
-$firstname_path = 'public/sounds/firstname/'.iconv("utf-8", "tis-620", $first_name ).'.mp3';
+//$firstname_path = 'public/sounds/firstname/'.$first_name.'.mp3';
+$firstname_path = 'public/sounds/firstname/first_name.mp3';
+
 
 $last_name = $item->getPSurname();
-$lastname_path = 'public/sounds/lastname/'.iconv("utf-8", "tis-620", $last_name ).'.mp3';
+//$lastname_path = 'public/sounds/lastname/'.$last_name.'.mp3';
+$lastname_path = 'public/sounds/lastname/last_name.mp3';
 
-
+//var_dump(is_file($lastname_path));
+//exit;
 
 if (!is_file($firstname_path)) {
 	$fcontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($first_name));
@@ -48,7 +52,7 @@ if (!is_file($lastname_path)) {
 </audio>
 
 <audio id="lastname" controls style="display:none;">
-  <source src="<?php echo $lastname_path; ?>" type="audio/mpeg">
+  <source src="<?php echo urldecode($lastname_path); ?>" type="audio/mpeg">
 </audio>
 
 <audio id="prefix2" controls style="display:none;">
