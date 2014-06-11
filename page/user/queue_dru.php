@@ -2,7 +2,7 @@
 $em = Local::getEM();
 //$config = $em->getRepository('Main\Entity\Que\Config')->find($_GET['id']);
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
-$qb->where('a.skip=0')
+$qb->where('a.skip_drug=0')
     ->andWhere('a.dru=1');
 
 $results = $qb->getQuery()->getResult();
@@ -23,7 +23,16 @@ foreach($results as $q){
         $last_ts = $dt;
     }
 }
+
+$deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 ?>
+<style type="text/css">
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-hover tbody tr:hover > td
+{
+    background: none;
+}
+</style>
 <div class='row-fluid'>
     <div class='span12'>
         <div class='page-header'>
@@ -57,70 +66,103 @@ foreach($results as $q){
             <script type="text/javascript">
                 $(function(){
                     $('#form-scan').submit(function(){
-                        window.open('index.php?page=user/scan', '', 'width=500, height=500, top=0');
+                        window.open('index.php?page=user/scan', '', 'width=100%, height=100%, top=0');
                     });
 
-                     $('form#formScan').submit(function(){
+                    var sc = $('#showScan');
+
+                    $('form#formScan').submit(function(){
+                        var dep_id = 0;
+                        var vn_id = $('#search', this).val();
+                        var trQ = $('.que-tr[hn_id="'+ vn_id +'"]');
+                        if(trQ.size()==0){
+                            return;
+                        }
+
+                        $('.s-name', sc).text($('.hn_name', trQ).text());
+                        $('.s-img', sc);
+
+                        $('.s-call-btn', sc).unbind('click.call').bind('click.call', function(e){
+                            e.preventDefault();
+                            $('.call-btn', trQ).click();
+                        });
+
+                        $('.s-skip-btn', sc).unbind('click.skip').bind('click.skip', function(e){
+                            e.preventDefault();
+                            $('.skip-btn', trQ).click();
+                        });
+
+                        $('.s-hide-btn', sc).unbind('click.hide').bind('click.hide', function(e){
+                            e.preventDefault();
+                            $('.hide-btn', trQ).click();
+                        }).find('span').text($('.hide-btn', trQ).text());
+
+                        $('.s-remark-input', sc).unbind('keyup.remark').bind('keyup.remark', function(e){
+                            //e.preventDefault();
+                            $('.remark-input', trQ).val($('.s-remark-input', sc).val());
+                        }).val($('.remark-input', trQ).val());
+
+                        $('.s-remark-btn', sc).unbind('click.remark').bind('click.remark', function(e){
+                            e.preventDefault();
+                            $('.remark-btn', trQ).click();
+                        });
+
                         $('#showScan').show();
+                        $('#search', this).val('');
+
                         return false;
                     });
 
+                    /*
                     $("#search").keypress(function(e){
                         if(e.which == 13){
                             e.preventDefault();
+                            $('form#formScan').submit();
+                        }
+                    });
+                    */
+
+
+
+                    $(window).keydown(function(e) {
+                        if (e.keyCode == 120) {
+                            $("#search").focus();
+                            return;
+                        }
+
+                        var tag = e.target.tagName.toLowerCase();
+                        if ( (tag != 'input' && tag != 'textarea') || e.target.id=='search'){
+                            if (e.which===117) {
+                                userAction('call');
+                            }else if(e.which===118){
+                                userAction('skip');
+                            }else if (e.which===119) {
+                                userAction('hide');
+                            }
+                        }
+
+                        function userAction(action) {
+                            e.preventDefault();
+
+                            if (action==='skip') {
+                                // Do some script
+                                $('.s-skip-btn', sc).click();
+                                sc.slideUp();
+
+                            }
+                            else if (action==='hide') {
+                                // Do some script
+                                $('.s-hide-btn', sc).click();
+
+                            }
+                            else if(action==='call'){
+                                // Do call
+                                $('.s-call-btn', sc).click();
+
+                            }
                         }
                     });
                 });
-
-                $(window).keydown(function(e) {
-                    if (e.keyCode == 120) {
-                        $("#search").focus();
-                    }
-
-                    var tag = e.target.tagName.toLowerCase();
-                    if ( tag != 'input' && tag != 'textarea'){
-                        if (e.which===117) {
-                            userAction('call');
-                        }else if(e.which===118){
-                            userAction('skip');
-                        }else if (e.which===119) {
-                            userAction('hide');
-                        }
-                    }
-                    if(e.target.id=='search'){
-                        if (e.which===117) {
-                            userAction('call');
-                        }else if(e.which===118){
-                            userAction('skip');
-                        }else if (e.which===119) {
-                            userAction('hide');
-                        }
-                    }
-
-                    function userAction(action){
-                        var vn_id = $("#search").val();
-                        var tr = $('.que-tr[hn_id="'+vn_id+'"]');
-
-                        if (action==='skip') {
-                            // Do some script
-                            $('.skip-btn', tr).click();
-
-                        }
-                        else if (action==='hide') {
-                            // Do some script
-                            $('.hide-btn', tr).click();
-
-                        }
-                        else if(action==='call'){
-                            // Do call
-                            $('.call-btn', tr).click();
-
-                        }
-
-                        $('#showScan').slideUp(200);
-                    }
-                });
-
 
             </script>
             <audio id="sound1" controls style="display:none;">
@@ -169,9 +211,10 @@ foreach($results as $q){
                     </div>
                     <div class="controls">
                         <input class="span3" disabled="" id="full-name1" type="text" value="ที่ห้อง">
-                        <select id="inputSelect">
-                            <option>OPD 1</option>
-                            <option>OPD 2</option>
+                        <select id="">
+                            <?php foreach($deps as $key=> $value){  ?>
+                            <option value="<?php echo $value->getId();?>"><?php echo $value->getName();?></option>
+                            <?php }?>
                         </select>
                     </div>
                 </div>
@@ -213,38 +256,49 @@ foreach($results as $q){
                     <form action="#" method="post" id="formScan">
                         <input type="text" name="search" style="margin: 0;" id="search">
                         <button class="btn">Scan</button>
-                        <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height=600');">Show User List</a>
                     </form>
                 </div>
                 <div class="span6 text-right">
                     <div class="">
-                        <span>Select Department</span>
-                        <select id="inputSelect">
-                            <option>OPD 1</option>
-                            <option>OPD 2</option>
-                        </select>
+                        <script type="text/javascript">
+                        $(function(){
+                            $('#select_department').change(function(e){
+                                var val = $(this).val();
+                                $('.que-tr').show();
+                                if(val=='all'){
+                                    return;
+                                }
+                                $('.que-tr[dep_id!="'+val+'"]').hide();
+                            });
+                        });
+                        </script>
                     </div>
                 </div>
             </div>
                 
             <div class="row-fluid" id="showScan" style="display:none;">
                 <div class="span6 text-center">
-                    <h3>Kritsanasak Kuntaros</h3>
-                    <img alt="250x150" src="http://placehold.it/250x150">
+                    <h3 class="s-name"></h3>
+                    <img alt="250x150" class="s-img" src="http://placehold.it/250x150">
                 </div>
                 <div class="span6">
                     <div class='text-center' style="padding-top: 50px">
-                        <a class='btn btn-success btn-large' href='#'>
+                        <a class='btn btn-success btn-large s-call-btn' href='#'>
                             <i class='icon-bullhorn'></i>
                             Call
                         </a>
-                        <a class='btn btn-large' href='javascript:void(0);' onclick="userAction('skip')">
-                            <i class='icon-mail-forward'></i>
+                        <a class='btn btn-large'>
+                            <i class='icon-mail-forward s-skip-btn'></i>
                             Skip
                         </a>
-                        <a class='btn btn-danger btn-large' href='javascript:void(0);' onclick="userAction('hide')">
+                        <a class='btn btn-danger btn-large s-hide-btn'>
                             <i class='icon-remove'></i>
-                            Hide
+                            <span>Hide</span>
+                        </a>
+                        <input class="s-remark-input">
+                        <a class='btn btn-info remark-btn s-remark-btn'>
+                            <i class='icon-info'></i>
+                            Save
                         </a>
                     </div>
                 </div>
@@ -261,6 +315,19 @@ foreach($results as $q){
             <div class='title'>User queue</div>
         </div>
         <div class='box-content'>
+
+
+            <div>
+                <span>Department</span>
+                <select id="select_department">
+                    <option value="all">All</option>
+                    <?php foreach($deps as $key=> $value){  ?>
+                        <option value="<?php echo $value->getId();?>"><?php echo $value->getName();?></option>
+                    <?php }?>
+                </select>
+
+                <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">Show User List</a>
+            </div>
 
             <div class='tabbable' style='margin-top: 20px'>
                 <ul class='nav nav-responsive nav-tabs'>
@@ -299,10 +366,14 @@ foreach($results as $q){
                                     </thead>
                                     <tbody class="show-queue-list">
                                     <?php foreach($shows as $item){?>
-                                    <tr class="que-tr" vn_id="<?php echo $item['vn_id'];?>" hn_id="<?php echo $item['hn_id'];?>">
+                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
+                                        vn_id="<?php echo $item['vn_id'];?>"
+                                        hn_id="<?php echo $item['hn_id'];?>"
+                                        dep_id="<?php echo $item['dep_id'];?>">
+
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
-                                        <td><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
+                                        <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href="index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>">
@@ -353,10 +424,14 @@ foreach($results as $q){
                                     </thead>
                                     <tbody class="hide-queue-list">
                                     <?php foreach($hides as $item){?>
-                                    <tr class="que-tr" vn_id="<?php echo $item['vn_id'];?>">
+                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
+                                        vn_id="<?php echo $item['vn_id'];?>"
+                                        hn_id="<?php echo $item['hn_id'];?>"
+                                        dep_id="<?php echo $item['dep_id'];?>">
+
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
-                                        <td><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
+                                        <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href='index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>'>
@@ -442,6 +517,15 @@ $(function(){
     }
 
     function remark(tr, text){
+        console.log(text);
+        if(text != "") {
+            tr.addClass('red-background');
+            console.log('if');
+        }
+        else {
+            tr.removeClass('red-background');
+            console.log('else');
+        }
         $('.remark-input', tr).val(text);
     }
 
@@ -476,7 +560,6 @@ $(function(){
         }
 
         var trs = table.find('tr');
-        console.log(trs);
         if(trs.size() == 0){
             table.append(tr);
             var btn = $('.hide-btn', tr);
@@ -504,7 +587,14 @@ $(function(){
     function clickCall(e){
         e.preventDefault();
         var link = $(this).attr('href');
-        window.open(link, '', 'width=1029, height=558, top=0');
+        var params = [
+            'height='+screen.height,
+            'width='+screen.width,
+            'left=0',
+            'top=0'
+            //'fullscreen=yes' // only works in IE, but here for completeness
+        ].join(',');
+        window.open(link, '', params);
     }
 
     function pull(){
@@ -512,15 +602,15 @@ $(function(){
             last_ts = data.last_ts;
             $(data.list).each(function(i, obj){
                 var tr =  $('tr[vn_id="'+obj.vn_id+'"]');
-                if(obj.skip==1){
+                if(obj.skip_dru==1){
                     skip(tr);
                     return;
                 }
 
                 var remarkInput = $('.remark-input', tr);
-                if(remarkInput.val() != obj.remark){
+                //if(remarkInput.val() != obj.remark){
                     remark(tr, obj.remark);
-                }
+                //}
 
                 var isHide = $('.hide-btn span', tr).text()=='Show';
                 if(isHide != obj.hide){

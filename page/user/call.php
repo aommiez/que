@@ -111,4 +111,20 @@ document.getElementById('suffix').addEventListener('ended', function(){
 	setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
+$(function(){
+    /*
+    function requestFullscreen( element ) {
+        if ( element.requestFullscreen ) {
+            element.requestFullscreen();
+        } else if ( element.mozRequestFullScreen ) {
+            element.mozRequestFullScreen();
+        } else if ( element.webkitRequestFullScreen ) {
+            element.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+        }
+    }
+
+    requestFullscreen(document.body);
+    $(document.body).click();
+    */
+});
 </script>
