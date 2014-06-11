@@ -186,7 +186,7 @@
                         </a>
                         <ul class='dropdown-menu'>
                             <li>
-                                <a href='<?php echo asset('user/logout/');?>'>
+                                <a href='index.php?page=user/logout&noTemp=true'>
                                     <i class='icon-signout'></i>
                                     Sign out
                                 </a>
