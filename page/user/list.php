@@ -32,36 +32,35 @@
                             <th>
                                 Username
                             </th>
+                            <th>
+                                Email
+                            </th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
+                        <?php
+                        $em = Local::getEM();
+                        $users = $em->getRepository('Main\Entity\Que\User')->findAll();
+                        foreach ($users as $user) {
+                        ?>
                         <tr>
-                            <td>User name 1</td>
+                            <td><?php echo $user->getName();?></td>
+                            <td><?php echo $user->getEmail();?></td>
                             <td>
                                 <div class='text-center'>
-                                    <a class='btn btn-success btn-mini' href='index.php?page=user/form' title="Edit">
+                                    <a class='btn btn-success btn-mini' href='index.php?page=user/form&id=<?php echo $user->getId();?>' title="Edit">
                                         <i class='icon-pencil'></i>
                                     </a>
-                                    <a class='btn btn-danger btn-mini' href='#' title="Delete">
+                                    <a class='btn btn-danger btn-mini' href='index.php?page=user/delete&id=<?php echo $user->getId();?>' title="Delete">
                                         <i class='icon-remove'></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>User name 1</td>
-                            <td>
-                                <div class='text-center'>
-                                    <a class='btn btn-success btn-mini' href='index.php?page=user/form' title="Edit">
-                                        <i class='icon-pencil'></i>
-                                    </a>
-                                    <a class='btn btn-danger btn-mini' href='#' title="Delete">
-                                        <i class='icon-remove'></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php 
+                        }
+                        ?>
                         </tbody>
                     </table>
                 </div>

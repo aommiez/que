@@ -1,3 +1,13 @@
+<?php 
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0 ;
+if ($id > 0) {
+    $em = Local::getEM();
+    $user = $em->getRepository('Main\Entity\Que\User')->find($id);
+    $name = $user->getName();
+    $email = $user->getEmail();
+}
+
+?>
 <div class='row-fluid'>
     <div class='span12'>
         <div class='page-header'>
@@ -11,28 +21,44 @@
 <div class='row-fluid'>
     <div class='span12 box'>
         <div class='box-content'>
-            <form accept-charset="UTF-8" action="#" class="form" method="post" style="margin-bottom: 0;" />
+            <form accept-charset="UTF-8" action="index.php?page=user/save&noTemp=true" class="form" method="post" style="margin-bottom: 0;" />
                 <div style="margin:0;padding:0;display:inline">
                     <input name="utf8" type="hidden" value="&#x2713;" />
                     <input name="authenticity_token" type="hidden" value="CFC7d00LWKQsSahRqsfD+e/mHLqbaVIXBvlBGe/KP+I=" />
                 </div>
                 <div class='control-group'>
-                    <label class='control-label' for='inputText'>Username</label>
+                    <label class='control-label' for='username'>Username</label>
                     <div class='controls'>
-                        <input class='input-block-level' id='inputText' placeholder='Username' type='text' />
+                        <input class='input-block-level' id='username' name="username" placeholder='Username' type='text' value="<?php echo isset($name) ? $name : "" ; ?>" required=""/>
+                    </div>
+                </div>
+                <div class='control-group'>
+                    <label class='control-label' for='email'>Email</label>
+                    <div class='controls'>
+                        <input class='input-block-level' id='email' name="email" placeholder='Username' type='email' value="<?php echo isset($email) ? $email : "" ; ?>" required=""/>
                     </div>
                 </div>
                 <div class='control-group'>
                     <label class='control-label' for='inputPassword'>Password</label>
                     <div class='controls'>
-                        <input class='input-block-level' id='inputPassword' placeholder='Password' type='password' value='' />
+                        <?php
+                        $require_field = $id > 0 ? "" : 'required=""' ;  
+                        ?>
+                        <input class='input-block-level' id='inputPassword' name="password" placeholder='Password' type='password' <?php echo $require_field; ?>/>
                     </div>
                 </div>
                 <div class='form-actions' style='margin-bottom: 0;'>
-                    <div class='btn btn-primary btn-large'>
+                    <button class='btn btn-primary btn-large' type="submit">
                         <i class='icon-save'></i>
                         Save
-                    </div>
+                    </button>
+                    <?php 
+                    if ($id > 0) {
+                        ?>
+                        <input type="hidden" name="user_id" value="<?php echo $user->getId();?>">
+                        <?php
+                    }
+                    ?>
                 </div>
             </form>
         </div>
