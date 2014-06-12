@@ -511,6 +511,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
     <td><input type="checkbox" name="id[]"></td>
     <td class="hn_id"></td>
     <td class="name"></td>
+    <td class="time"></td>
     <td>
         <div class='text-center'>
             <a class='btn btn-success call-btn' href="">
@@ -652,6 +653,13 @@ $(function(){
 
     function clickCall(e){
         e.preventDefault();
+        var tr = $(this).closest('tr.que-tr');
+        var vn_id = tr.attr('vn_id');
+        var name = $('.hn_name', tr).text();
+        $.post('index.php?page=user/set_call_dru', {vn_id: vn_id}, function(data){}, 'json');
+        alert('Call: '+ name);
+        return;
+
         var tr = $(this).closest('.que-tr');
         var vn_id = tr.attr('vn_id');
         var params = [
@@ -677,6 +685,7 @@ $(function(){
 
         $('.hn_id', tr).text(obj.hn_id);
         $('.name', tr).text(obj.p_name + ' ' + obj.p_surname);
+        $('.time', tr).text(time[1]);
         $('.remark-input', tr).val(obj.remark);
 
         $('.skip-btn', tr).click(clickSkip);
@@ -693,16 +702,18 @@ $(function(){
             $(data.list).each(function(i, obj){
                 var tr =  $('tr[vn_id="'+obj.vn_id+'"]');
 
-                if(tr.size()==0){
+                if(tr.size()==0 && obj.skip_dru==false){
                     tr = createTr(obj);
                     if(obj.hide){
                         $('.table-hideuser tbody').append(tr);
-                        console.log('append to hide');
                     }
                     else {
                         $('.table-showuser tbody').append(tr);
-                        console.log('append to show');
                     }
+                    return;
+                }
+
+                if(tr.size()==0){
                     return;
                 }
 

@@ -8,6 +8,8 @@
 
 require_once 'bootstrap.php';
 
+set_time_limit(300);
+
 $em = Local::getEM();
 $vem = Local::getVEM();
 
