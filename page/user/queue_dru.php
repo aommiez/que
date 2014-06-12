@@ -369,7 +369,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                     <div class="tab-pane active" id="showUsers">
                         <div class='responsive-table'>
                             <div class='scrollable-area'>
-                                <table class='table table-bordered table-hover table-striped' style='margin-bottom:0;'>
+                                <table class='table table-bordered table-hover table-striped table-showuser' style='margin-bottom:0;'>
                                     <thead>
                                     <tr>
                                         <th>
@@ -400,20 +400,20 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
-                                                <a class='btn btn-success call-btn' href="index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>">
+                                                <a class='btn btn-success call-btn' href="">
                                                     <i class='icon-bullhorn'></i>
                                                     Call
                                                 </a>
-                                                <a class='btn skip-btn' href='index.php?page=user/skip&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn skip-btn' href=''>
                                                     <i class='icon-mail-forward'></i>
                                                     Skip
                                                 </a>
-                                                <a class='btn btn-danger hide-btn' href='index.php?page=user/hide&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn btn-danger hide-btn' href=''>
                                                     <i class='icon-remove'></i>
                                                     <span>Hide</span>
                                                 </a>
                                                 <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
-                                                <a class='btn btn-info remark-btn' href='index.php?page=user/remark&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn btn-info remark-btn' href=''>
                                                     <i class='icon-info'></i>
                                                     Save
                                                 </a>
@@ -429,7 +429,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                     <div class="tab-pane" id="hideUsers">
                         <div class='responsive-table'>
                             <div class='scrollable-area'>
-                                <table class='table table-bordered table-hover table-striped' style='margin-bottom:0;'>
+                                <table class='table table-bordered table-hover table-striped table-hideuser' style='margin-bottom:0;'>
                                     <thead>
                                     <tr>
                                         <th>
@@ -460,20 +460,20 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
                                         <td>
                                             <div class='text-center'>
-                                                <a class='btn btn-success call-btn' href='index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn btn-success call-btn' href=''>
                                                     <i class='icon-bullhorn'></i>
                                                     Call
                                                 </a>
-                                                <a class='btn skip-btn' href='index.php?page=user/skip&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn skip-btn' href=''>
                                                     <i class='icon-mail-forward'></i>
                                                     Skip
                                                 </a>
-                                                <a class='btn btn-danger hide-btn' href='index.php?page=user/hide&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn btn-danger hide-btn' href=''>
                                                     <i class='icon-remove'></i>
                                                     <span>Show</span>
                                                 </a>
                                                 <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
-                                                <a class='btn btn-info remark-btn' href='index.php?page=user/remark&vn_id=<?php echo $item['vn_id'];?>'>
+                                                <a class='btn btn-info remark-btn' href=''>
                                                     <i class='icon-info'></i>
                                                     Save
                                                 </a>
@@ -492,7 +492,40 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
         </div>
     </div>
 </div>
+<script type="text/template" id="template_tr">
+<tr class="que-tr"
+    vn_id=""
+    hn_id=""
+    dep_id=""
+    datetime=""
+    >
 
+    <td><input type="checkbox" name="id[]"></td>
+    <td class="hn_id"></td>
+    <td class="name"></td>
+    <td>
+        <div class='text-center'>
+            <a class='btn btn-success call-btn' href="">
+                <i class='icon-bullhorn'></i>
+                Call
+            </a>
+            <a class='btn skip-btn' href=''>
+                <i class='icon-mail-forward'></i>
+                Skip
+            </a>
+            <a class='btn btn-danger hide-btn' href=''>
+                <i class='icon-remove'></i>
+                <span>Hide</span>
+            </a>
+            <input type="text" placeholder="Remark" class="remark-input" value="">
+            <a class='btn btn-info remark-btn' href=''>
+                <i class='icon-info'></i>
+                Save
+            </a>
+        </div>
+    </td>
+</tr>
+</script>
 <script type="text/javascript">
 $(function(){
     var last_ts = <?php echo $last_ts;?>;
@@ -543,7 +576,6 @@ $(function(){
     }
 
     function remark(tr, text){
-        console.log(text);
         if(text != "") {
             tr.addClass('red-background');
             console.log('if');
@@ -612,7 +644,8 @@ $(function(){
 
     function clickCall(e){
         e.preventDefault();
-        var link = $(this).attr('href');
+        var tr = $(this).closest('.que-tr');
+        var vn_id = tr.attr('vn_id');
         var params = [
             'height='+screen.height,
             'width='+screen.width,
@@ -620,7 +653,30 @@ $(function(){
             'top=0'
             //'fullscreen=yes' // only works in IE, but here for completeness
         ].join(',');
-        window.open(link+'&dru=yes', '', params);
+        window.open('index.php?page=user/call&user_id='+vn_id+'&dru=yes', '', params);
+    }
+
+    function createTr(obj){
+        var template = $('#template_tr').html();
+        var tr = $(template);
+        tr.attr('vn_id', obj.vn_id);
+        tr.attr('hn_id', obj.hn_id);
+        tr.attr('dep_id', obj.dep_id);
+
+        var date = obj.date.date.split(" ");
+        var time = obj.time.date.split(" ");
+        tr.attr('datetime', date[0]+ " " +time[1]);
+
+        $('.hn_id', tr).text(obj.hn_id);
+        $('.name', tr).text(obj.p_name + ' ' + obj.p_surname);
+        $('.remark-input', tr).val(obj.remark);
+
+        $('.skip-btn', tr).click(clickSkip);
+        $('.remark-btn', tr).click(clickRemark);
+        $('.hide-btn', tr).click(clickHide);
+        $('.call-btn', tr).click(clickCall);
+
+        return tr;
     }
 
     function pull(){
@@ -628,15 +684,29 @@ $(function(){
             last_ts = data.last_ts;
             $(data.list).each(function(i, obj){
                 var tr =  $('tr[vn_id="'+obj.vn_id+'"]');
+
+                if(tr.size()==0){
+                    tr = createTr(obj);
+                    if(obj.hide){
+                        $('.table-hideuser tbody').append(tr);
+                        console.log('append to hide');
+                    }
+                    else {
+                        $('.table-showuser tbody').append(tr);
+                        console.log('append to show');
+                    }
+                    return;
+                }
+
                 if(obj.skip_dru==1){
                     skip(tr);
                     return;
                 }
 
                 var remarkInput = $('.remark-input', tr);
-                //if(remarkInput.val() != obj.remark){
+                if(remarkInput.val() != obj.remark){
                     remark(tr, obj.remark);
-                //}
+                }
 
                 var isHide = $('.hide-btn span', tr).text()=='Show';
                 if(isHide != obj.hide){
