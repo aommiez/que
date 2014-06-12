@@ -19,6 +19,7 @@ if($user!==null){
 		'id' => $user->getId(),
 		'name' => $user->getName(),
 		'email' => $user->getEmail(),
+		'level' => $user->getLevel(),
 	);
 	header('Location: index.php?page=department/list');
 }else{

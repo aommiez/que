@@ -52,9 +52,16 @@
                                     <a class='btn btn-success btn-mini' href='index.php?page=user/form&id=<?php echo $user->getId();?>' title="Edit">
                                         <i class='icon-pencil'></i>
                                     </a>
-                                    <a class='btn btn-danger btn-mini' href='index.php?page=user/delete&id=<?php echo $user->getId();?>' title="Delete">
+                                    <?php 
+                                    if ($_SESSION['user']['level'] > 1) {
+                                    ?>
+                                    <a class='btn btn-danger btn-mini' href='index.php?page=user/delete&id=<?php echo $user->getId();?>&noTemp=true' title="Delete">
                                         <i class='icon-remove'></i>
                                     </a>
+                                    <?php
+                                    }
+                                    ?>
+                                    
                                 </div>
                             </td>
                         </tr>

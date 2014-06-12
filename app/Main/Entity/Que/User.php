@@ -20,6 +20,9 @@ class User{
     /** @Column(type="string") */
     protected $password;
 
+    /** @Column(type="integer") */
+    protected $level;
+
     /**
      * @return mixed
      */
@@ -74,5 +77,21 @@ class User{
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * @param mixed $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->level;
     }
 }

@@ -1,10 +1,18 @@
 <?php 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0 ;
+$user = null;
 if ($id > 0) {
     $em = Local::getEM();
     $user = $em->getRepository('Main\Entity\Que\User')->find($id);
     $name = $user->getName();
     $email = $user->getEmail();
+
+    if ($_SESSION['user']['level'] < 99 && $user->getId()!==$_SESSION['user']['id']) {
+        ?>
+        <meta http-equiv="Refresh" content="0; url=index.php?page=user/list">
+        <?php
+        exit;
+    }
 }
 
 ?>
