@@ -55,8 +55,16 @@ if (!is_file($lastname_path)) {
 }
 
 ?>
+<style>
+    body {
+        background: url(public/img/patterns/4.png);
+    }
+</style>
+<audio id="startCall" controls autoplay style="display:none;">
+    <source src="public/sounds/doorbell-1.wav" type="audio/mpeg">
+</audio>
 
-<audio id="prefix1" controls autoplay style="display:none;">
+<audio id="prefix1" controls  style="display:none;">
   <source src="public/sounds/prefix1.mp3" type="audio/mpeg">
 </audio>
 
@@ -79,20 +87,47 @@ if (!is_file($lastname_path)) {
 <audio id="suffix" controls style="display:none;">
 	<source src="public/sounds/suffix.mp3" type="audio/mpeg">
 </audio>
-<div class='row-fluid'>
+<style>
+    .boxshadow {
+        border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        -webkit-border-radius: 10px 10px 10px 10px;
+        border: 0px solid #000000;
+        -moz-box-shadow: 0 0 10px 1px #333;
+        -webkit-box-shadow: 0 0 10px 1px #333;
+        box-shadow: 0 0 10px 1px #333;
+        margin-bottom: 16px;
+    }
+</style>
+<div class='row-fluid' >
     <div class='span12'>
-    	<div class="box-content box-double-padding text-center">
-    		<h1 style="font-size: 4em; line-height: 80px;">ขอเชิญคุณ</h1>
-			<h1 style="font-size: 4em; line-height: 80px;"><?php echo $item->getPName()." ".$item->getPSurname();?></h1>
-	        <div>
-	            <img src="<?php echo $pImgPath;?>" width="350" height="350" >
-	            <img src="<?php echo $dImgPath;?>" width="350" height="350" >
-	        </div>
-    	</div>
+        <div class="box-content box-double-padding text-center">
+
+            <div style="padding-top: 50px;">
+                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px;line-height: 80px;padding-bottom: 46px;"><i class="icon-volume-up"></i> ขอเชิญคุณ</h1>
+                <div style="display: inline-block;vertical-align: top;margin-right: 200px;">
+                    <img src="<?php echo $pImgPath;?>" width="350" height="350" class="boxshadow">
+                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $item->getPName()." ".$item->getPSurname();?></h1>
+                </div>
+                <div style="display: inline-block;vertical-align: top;">
+                    <img src="<?php echo $dImgPath;?>" width="350" height="350" style="height: 350px;" class="boxshadow">
+                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;">ห้องรับยา</h1>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
+
+
+document.getElementById('startCall').addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        document.getElementById('prefix1').play();
+}, false);
+
+
 document.getElementById('prefix1').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
@@ -127,7 +162,7 @@ document.getElementById('suffix').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
 
-	setTimeout(function(){ window.close(); }, 3000);
+	//setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
 $(function(){
