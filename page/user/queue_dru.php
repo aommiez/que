@@ -60,7 +60,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
     <div class='span12 box box-collapsed'>
         <div class="box-header red-background">
             <div class="title">
-                Dru
+                <i class='icon-volume-up'></i> Drug Room Sound Config
             </div>
             <div class="actions">
                 <a href="#" class="btn box-collapse btn-mini btn-link"><i></i> </a>
@@ -221,11 +221,6 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                     </div>
                     <div class="controls">
                         <input class="span3" disabled="" id="full-name1" type="text" value="ที่ห้อง">
-                        <select id="">
-                            <?php foreach($deps as $key=> $value){  ?>
-                            <option value="<?php echo $value->getId();?>"><?php echo $value->getName();?></option>
-                            <?php }?>
-                        </select>
                     </div>
                 </div>
 
@@ -253,7 +248,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
     <div class='span12 box'>
         <div class="box-header red-background">
             <div class="title">
-                Scan barcode
+                <i class='icon-search'></i> Scan barcode
             </div>
             <div class="actions">
                 <a href="#" class="btn box-collapse btn-mini btn-link"><i></i> </a>
@@ -262,7 +257,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
         <div class="box-content">
             <div class="row-fluid">
-                <div class="span6">
+                <div class="span6" style="margin-bottom: -20px;padding-top: 10px;">
                     <form action="#" method="post" id="formScan">
                         <input type="text" name="search" style="margin: 0;" id="search">
                         <button class="btn">Scan</button>
@@ -288,7 +283,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 
             <div class="row-fluid" id="showScan" style="display:none;">
                 <div class="span6 text-center">
-                    <h3 class="s-name"></h3>
+                    <h1 class="s-name"></h1>
                     <img alt="250x150" class="s-img" src="">
                 </div>
                 <div class="span6">
@@ -313,7 +308,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                     </div>
                 </div>
             </div>
-
+            <div class="form-actions" style="font-size: 20px;">
+                <i class="icon-comment"></i>&nbsp;&nbsp;&nbsp; F9 = Focus textbox , F6 = Call , F7 = Skip , F8 = Hide
+            </div>
             
         </div>
     </div>
@@ -322,7 +319,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 <div class='row-fluid'>
     <div class='span12 box'>
         <div class='box-header red-background'>
-            <div class='title'>User queue</div>
+            <div class='title'><i class='icon-time'></i> User queue</div>
         </div>
         <div class='box-content'>
 
@@ -338,28 +335,31 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 </select>
                 -->
 
-                <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">Show User List</a>
-
+                <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">เรียกหน้าต่างแสดงคิวแบบเล็ก</a>
+                <div style="float:right">
                 <form method="get" style="display: inline-block;">
                     <input type="hidden" name="page" value="user/clear_dru">
-                    Skip User
+                    Skip รายชื่อที่อยุ่ในคิวนานกว่า
                     <select name="minute">
-                        <option value="30">30</option>
-                        <option value="60">60</option>
+                        <option value="30">30 นาที</option>
+                        <option value="60">60 นาที</option>
                     </select>
-                    <button type="submit">Submit</button>
+                    <button type="submit">Skip</button>
                 </form>
+                </div>
             </div>
 
             <div class='tabbable' style='margin-top: 20px'>
                 <ul class='nav nav-responsive nav-tabs'>
                     <li class='active'>
                         <a data-toggle='tab' href='#showUsers'>
-                            Show
+                            <i class="icon-ok-sign"></i> Show
                         </a>
                     </li>
                     <li class=''>
+
                         <a data-toggle='tab' href='#hideUsers'>
+                            <i class="icon-question-sign"></i>
                             Hide
                         </a>
                     </li>
@@ -379,7 +379,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                             HN ID
                                         </th>
                                         <th>
-                                            name
+                                            ชื่อ นามสกุล
+                                        </th>
+                                        <th>
+                                            เวลา
                                         </th>
                                         <th>
                                             <div class="text-center">Action</div>
@@ -398,6 +401,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
+                                        <td><?php echo $item['time']->format('H:i:s');?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href="index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>">

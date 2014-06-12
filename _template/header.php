@@ -217,8 +217,8 @@
                     </a>
                 </li>
                 <li class=''>
-                    <a href='#'>
-                        <i class='icon-file-alt'></i>
+                    <a href='index.php?page=appsetting/main'>
+                        <i class='icon-cog'></i>
                         <span>Apps Setting</span>
                     </a>
                 </li>
