@@ -443,7 +443,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                             HN ID
                                         </th>
                                         <th>
-                                            name
+                                            ชื่อ นามสกุล
+                                        </th>
+                                        <th>
+                                            เวลา
                                         </th>
                                         <th>
                                             <div class="text-center">Action</div>
@@ -462,6 +465,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
+                                        <td><?php echo $item['time']->format('H:i:s');?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href='index.php?page=user/call&user_id=<?php echo $item['vn_id'];?>'>
