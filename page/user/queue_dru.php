@@ -35,7 +35,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 }
 
 .yellow-bg {
-    background-color: #f8f187;
+    background-color: #FEFCCB;
+}
+.red-background-remark {
+    background: #FFD2D3;
 }
 </style>
 <div class='row-fluid'>
@@ -391,7 +394,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                     </thead>
                                     <tbody class="show-queue-list">
                                     <?php foreach($shows as $item){?>
-                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
+                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background-remark";?>"
                                         vn_id="<?php echo $item['vn_id'];?>"
                                         hn_id="<?php echo $item['hn_id'];?>"
                                         dep_id="<?php echo $item['dep_id'];?>"
@@ -553,11 +556,11 @@ $(function(){
     function remark(tr, text){
         console.log(text);
         if(text != "") {
-            tr.addClass('red-background');
+            tr.addClass('red-background-remark');
             console.log('if');
         }
         else {
-            tr.removeClass('red-background');
+            tr.removeClass('red-background-remark');
             console.log('else');
         }
         $('.remark-input', tr).val(text);
