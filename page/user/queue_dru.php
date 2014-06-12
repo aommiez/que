@@ -341,7 +341,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">Show User List</a>
 
                 <form method="get" style="display: inline-block;">
-                    <input type="hidden" value="user/clear_dru">
+                    <input type="hidden" name="page" value="user/clear_dru">
                     Skip User
                     <select name="minute">
                         <option value="30">30</option>
