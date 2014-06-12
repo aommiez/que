@@ -222,6 +222,12 @@
                         <span>Apps Setting</span>
                     </a>
                 </li>
+                <li class=''>
+                    <a href='#'>
+                        <i class='icon-download-alt'></i>
+                        <span>Logs</span>
+                    </a>
+                </li>
             </ul>
         </div> 
     </nav>

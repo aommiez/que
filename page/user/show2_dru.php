@@ -1,16 +1,25 @@
 <style type="text/css">
 .yellow-bg {
-    background-color: #f8f187;
+    background-color: #FEFCCB;
+    border-bottom-color: #E5DB55;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+}
+.red-background-remark {
+    background: #FFD2D3;
+    border-bottom-color: #DF8F90;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
 }
 </style>
 <div class="row-fluid dep-ctx">
     <div class="span12 box">
         <div class="box-header red-background">
             <div class="title">
-                Drug
+                <i class="icon-list"></i> รายชื่อคิว
             </div>
         </div>
-        <div class="box-content">
+        <div class="box-content" style="padding:0px;">
 
         </div>
     </div>

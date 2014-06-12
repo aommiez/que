@@ -56,17 +56,17 @@ while($time < $timeOut){
             /** @var \Main\Entity\Que\Que $item */
             $value = $item->toArray();
             $time = $value['time']->format("H:i");
-            $red_bg = empty($value['remark'])? "": "red-background";
+            $red_bg = empty($value['remark'])? "": "red-background-remark";
             $datetime = $value['date']->format('D M d Y')." ".$value['time']->format('H:i:s');
             $res['html'] .= <<<HTML
-            <div class="row-fluid {$red_bg} que-ctx" style="margin-bottom: 6px;" datetime="{$datetime}">
+            <div class="row-fluid {$red_bg} que-ctx"  datetime="{$datetime}" style="padding-top: 10px;">
                 <div class="span1" style="padding: 10px 0 0 10px;">
                     <img src="http://placehold.it/100x100" >
                 </div>
                 <div class="span11 text-left"  style="padding: 5px 0;">
-                    <p><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
-                    <p>{$value['remark']}</p>
-                    <p>{$time}</p>
+                    <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
+                    <p style="font-size: 20px;">{$value['remark']}</p>
+                    <p style="font-size: 14px;">เวลา : {$time}</p>
                 </div>
             </div>
 HTML;
