@@ -61,7 +61,7 @@ if (!is_file($lastname_path)) {
     }
 </style>
 <audio id="startCall" controls autoplay style="display:none;">
-    <source src="public/sounds/doorbell-1.wav" type="audio/mpeg">
+    <source src="public/sounds/1.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="prefix1" controls  style="display:none;">
