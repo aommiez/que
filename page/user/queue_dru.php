@@ -2,9 +2,10 @@
 $em = Local::getEM();
 //$config = $em->getRepository('Main\Entity\Que\Config')->find($_GET['id']);
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
-$qb->where('a.skip_drug=0')
+$qb->where('a.skip_dru=0')
     ->andWhere('a.dru=1');
 
+$results = $qb->getQuery()->getResult();
 $results = $qb->getQuery()->getResult();
 
 $shows = array();
@@ -31,6 +32,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 .table-hover tbody tr:hover > td
 {
     background: none;
+}
+
+.yellow-bg {
+    background-color: #f8f187;
 }
 </style>
 <div class='row-fluid'>
@@ -71,16 +76,24 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                     var sc = $('#showScan');
 
-                    $('form#formScan').submit(function(){
+                    $('form#formScan').submit(function(e){
+                        e.preventDefault();
+
                         var dep_id = 0;
-                        var vn_id = $('#search', this).val();
-                        var trQ = $('.que-tr[hn_id="'+ vn_id +'"]');
+                        var hn_id = $('#search', this).val();
+                        var trQ = $('.que-tr[hn_id="'+ hn_id +'"]');
                         if(trQ.size()==0){
                             return;
                         }
 
                         $('.s-name', sc).text($('.hn_name', trQ).text());
-                        $('.s-img', sc);
+                        var img = $('.s-img', sc);
+                        img.unbind('error');
+                        img.error(function(e){
+                            $(this).attr('src', 'http://placehold.it/250x150');
+                        });
+                        var pathImg  =  'public/img/users/'+hn_id+'.bmp';
+                        $(img).attr('src', pathImg);
 
                         $('.s-call-btn', sc).unbind('click.call').bind('click.call', function(e){
                             e.preventDefault();
@@ -109,8 +122,6 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                         $('#showScan').show();
                         $('#search', this).val('');
-
-                        return false;
                     });
 
                     /*
@@ -143,7 +154,6 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                         function userAction(action) {
                             e.preventDefault();
-
                             if (action==='skip') {
                                 // Do some script
                                 $('.s-skip-btn', sc).click();
@@ -279,7 +289,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
             <div class="row-fluid" id="showScan" style="display:none;">
                 <div class="span6 text-center">
                     <h3 class="s-name"></h3>
-                    <img alt="250x150" class="s-img" src="http://placehold.it/250x150">
+                    <img alt="250x150" class="s-img" src="">
                 </div>
                 <div class="span6">
                     <div class='text-center' style="padding-top: 50px">
@@ -318,6 +328,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
 
             <div>
+                <!--
                 <span>Department</span>
                 <select id="select_department">
                     <option value="all">All</option>
@@ -325,8 +336,19 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                         <option value="<?php echo $value->getId();?>"><?php echo $value->getName();?></option>
                     <?php }?>
                 </select>
+                -->
 
                 <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">Show User List</a>
+
+                <form method="get" style="display: inline-block;">
+                    <input type="hidden" value="user/clear_dru">
+                    Skip User
+                    <select name="minute">
+                        <option value="30">30</option>
+                        <option value="60">60</option>
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
             </div>
 
             <div class='tabbable' style='margin-top: 20px'>
@@ -369,7 +391,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                     <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
                                         vn_id="<?php echo $item['vn_id'];?>"
                                         hn_id="<?php echo $item['hn_id'];?>"
-                                        dep_id="<?php echo $item['dep_id'];?>">
+                                        dep_id="<?php echo $item['dep_id'];?>"
+                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time']->format('H:i:s');?>"
+                                        >
 
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
@@ -427,7 +451,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                     <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
                                         vn_id="<?php echo $item['vn_id'];?>"
                                         hn_id="<?php echo $item['hn_id'];?>"
-                                        dep_id="<?php echo $item['dep_id'];?>">
+                                        dep_id="<?php echo $item['dep_id'];?>"
+                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time']->format('H:i:s');?>"
+                                        >
 
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
@@ -480,7 +506,7 @@ $(function(){
 
         var tr = btn.closest('tr.que-tr');
         var vn_id = tr.attr('vn_id');
-        $.post('index.php?page=user/skip', {vn_id: vn_id}, function(data){
+        $.post('index.php?page=user/skip_dru', {vn_id: vn_id}, function(data){
             if(data.success){
                 skip(tr);
             }
@@ -490,7 +516,7 @@ $(function(){
 
     function skip(tr){
         $(tr).fadeOut(function(e){
-            //$(this).remove();
+            $(this).remove();
         });
     }
 
@@ -594,7 +620,7 @@ $(function(){
             'top=0'
             //'fullscreen=yes' // only works in IE, but here for completeness
         ].join(',');
-        window.open(link, '', params);
+        window.open(link+'&dru=yes', '', params);
     }
 
     function pull(){
@@ -627,5 +653,23 @@ $(function(){
     $('.remark-btn').click(clickRemark);
     $('.hide-btn').click(clickHide);
     $('.call-btn').click(clickCall);
+});
+</script>
+<script type="text/javascript">
+$(function(){
+    function fetchYellow(){
+        $('tr.que-tr').each(function(){
+            var datetime = $(this).attr('datetime');
+            var date = new Date(datetime);
+            var now = new Date();
+
+            if(date.getTime() < (now.getTime()-(30*60000))){
+                $(this).addClass('yellow-bg');
+            }
+        });
+    }
+
+    fetchYellow();
+    setInterval(fetchYellow, 5000);
 });
 </script>

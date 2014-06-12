@@ -9,8 +9,7 @@
 $em  = Local::getEM();
 $item = $em->getRepository('Main\Entity\Que\Que')->findOneBy(array('vn_id'=> $_POST['vn_id']));
 if(!is_null($item)){
-    $item->setSkip(true);
-    $item->setHide(false);
+    $item->setSkipDru(true);
     $em->merge($item);
     $em->flush($item);
 }

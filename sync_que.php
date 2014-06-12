@@ -43,6 +43,15 @@ foreach($items as $item){
     $em->persist($que);
     $em->flush();
 
+    $imgPath = 'public/img/users/'.$item->getHnId().'.bmp';
+    if(!file_exists($imgPath)){
+        $pImg = $vem->getRepository('Main\Entity\View\PImage')->findOneBy(array('hn_id'=> $item->getHnId()));
+        if(!is_null($pImg->getImage())){
+            file_put_contents($imgPath, $pImg->getImage());
+        }
+        unset($pImg);
+    }
+
     $rs[] = $que->toArray();
 }
 echo json_encode($rs);

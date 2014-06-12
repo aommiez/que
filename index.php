@@ -7,7 +7,7 @@
  */
 require_once 'bootstrap.php';
 
-session_start();
+//session_start();
 
 $_page = isset($_GET['page'])? $_GET['page']: 'index';
 

@@ -262,4 +262,22 @@ class Que extends BaseEntity {
     {
         return $this->vn_id;
     }
+
+    /**
+     * @param mixed $skip_dru
+     */
+    public function setSkipDru($skip_dru)
+    {
+        $this->skip_dru = $skip_dru;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSkipDru()
+    {
+        return $this->skip_dru;
+    }
+
+
 }

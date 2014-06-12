@@ -20,7 +20,7 @@ $qb->select('count(a)')
 
 $qb2 = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb2->where('a.dru = 1')
-    ->andWhere('a.skip=0')
+    ->andWhere('a.skip_dru=0')
     ->andWhere('a.hide=0');
 
 
@@ -57,17 +57,16 @@ while($time < $timeOut){
             $value = $item->toArray();
             $time = $value['time']->format("H:i");
             $red_bg = empty($value['remark'])? "": "red-background";
+            $datetime = $value['date']->format('D M d Y')." ".$value['time']->format('H:i:s');
             $res['html'] .= <<<HTML
-            <div class="que-list-ctx">
-                <div class="row-fluid {$red_bg} que-ctx" style="margin-bottom: 6px;">
-                    <div class="span1" style="padding: 10px 0 0 10px;">
-                        <img src="http://placehold.it/100x100" >
-                    </div>
-                    <div class="span11 text-left"  style="padding: 5px 0;">
-                        <p><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
-                        <p>{$value['remark']}</p>
-                        <p>{$time}</p>
-                    </div>
+            <div class="row-fluid {$red_bg} que-ctx" style="margin-bottom: 6px;" datetime="{$datetime}">
+                <div class="span1" style="padding: 10px 0 0 10px;">
+                    <img src="http://placehold.it/100x100" >
+                </div>
+                <div class="span11 text-left"  style="padding: 5px 0;">
+                    <p><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
+                    <p>{$value['remark']}</p>
+                    <p>{$time}</p>
                 </div>
             </div>
 HTML;

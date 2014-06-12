@@ -25,8 +25,9 @@ foreach($results as $q){
         $last_ts = $dt;
     }
 }
-
-$deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
+$deps = $em->getRepository('Main\Entity\Que\Dep')->createQueryBuilder('a')
+    ->where($qb->expr()->in('a.id', $deps_id))
+    ->getQuery()->getResult();
 ?>
 <style type="text/css">
     .table-striped tbody > tr:nth-child(odd) > td,
@@ -371,7 +372,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
                                             vn_id="<?php echo $item['vn_id'];?>"
                                             hn_id="<?php echo $item['hn_id'];?>"
-                                            dep_id="<?php echo $item['dep_id'];?>">
+                                            dep_id="<?php echo $item['dep_id'];?>"
+                                            created_at="<?php echo $item['created_at'];?>"
+                                            >
 
                                             <td><input type="checkbox" name="id[]"></td>
                                             <td><?php echo $item['hn_id'];?></td>
@@ -429,7 +432,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
                                             vn_id="<?php echo $item['vn_id'];?>"
                                             hn_id="<?php echo $item['hn_id'];?>"
-                                            dep_id="<?php echo $item['dep_id'];?>">
+                                            dep_id="<?php echo $item['dep_id'];?>"
+                                            created_at="<?php echo $item['created_at'];?>"
+                                            >
 
                                             <td><input type="checkbox" name="id[]"></td>
                                             <td><?php echo $item['hn_id'];?></td>

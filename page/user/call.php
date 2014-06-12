@@ -2,11 +2,30 @@
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0 ;
 
 $em = Local::getEM();
+$vem = Local::getVEM();
 $item = $em->getRepository('Main\Entity\Que\Que')->findOneBy(array('vn_id' => $user_id));
+
+// image path
+$pImgPath = 'public/img/users/'.$item->getHnId().'.bmp';
+if(!file_exists($pImgPath)){
+    $pImgPath = "public/img/users/default.png";
+}
+
+$dImgPath = 'public/img/dep/'.$item->getDepId().'.jpg';
+if($item->getDru()){
+    $dImgPath = 'public/img/dep/drug.jpg';
+}
+if(!file_exists($dImgPath)){
+    $dImgPath = "public/img/dep/hqdefault.jpg";
+}
 
 $room = $em->getRepository('Main\Entity\Que\Dep')->findOneBy(array('id' => intval($item->getDepId()) ));
 $room_path = 'public/sounds/room/'.$item->getDepId().'.mp3';
-$room_name = $room->getName();
+$room_name = $room->getGSpeak();
+if($item->getDru()){
+    $room_name = 'รับยา';
+    $room_path = 'drug';
+}
 $room_id = $item->getDepId();
 if (!is_file($room_path)) {
 	$scontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($room_name));
@@ -66,8 +85,8 @@ if (!is_file($lastname_path)) {
     		<h1 style="font-size: 4em; line-height: 80px;">ขอเชิญคุณ</h1>
 			<h1 style="font-size: 4em; line-height: 80px;"><?php echo $item->getPName()." ".$item->getPSurname();?></h1>
 	        <div>
-	            <img src="http://placehold.it/350x350" >
-	            <img src="http://placehold.it/350x350" >
+	            <img src="<?php echo $pImgPath;?>" width="350" height="350" >
+	            <img src="<?php echo $dImgPath;?>" width="350" height="350" >
 	        </div>
     	</div>
     </div>
