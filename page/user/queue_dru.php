@@ -656,12 +656,14 @@ $(function(){
 
     function clickCall(e){
         e.preventDefault();
+
         var tr = $(this).closest('tr.que-tr');
         var vn_id = tr.attr('vn_id');
         var name = $('.hn_name', tr).text();
         $.post('index.php?page=user/set_call_dru', {vn_id: vn_id}, function(data){}, 'json');
         alert('Call: '+ name);
         return;
+
 
         var tr = $(this).closest('.que-tr');
         var vn_id = tr.attr('vn_id');

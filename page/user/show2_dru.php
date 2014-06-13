@@ -58,3 +58,26 @@ $(function(){
     pull();
 });
 </script>
+<script type="text/javascript">
+$(function(){
+    var last_id = 'init';
+    function pull(){
+        $.post('index.php?page=pull/user/call_dru', {last_id: last_id}, function(data){
+            last_id = data.last_id;
+            if(data.call){
+                var params = [
+                    'height='+screen.height,
+                    'width='+screen.width,
+                    'left=0',
+                    'top=0'
+                    //'fullscreen=yes' // only works in IE, but here for completeness
+                ].join(',');
+                window.open('index.php?page=user/call&user_id='+data.call.vn_id+'&dru=yes', '', params);
+            }
+            pull();
+        }, 'json');
+    }
+
+    pull();
+});
+</script>

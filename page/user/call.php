@@ -106,11 +106,11 @@ if (!is_file($lastname_path)) {
             <div style="padding-top: 50px;">
                 <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px;line-height: 80px;padding-bottom: 46px;"><i class="icon-volume-up"></i> ขอเชิญคุณ</h1>
                 <div style="display: inline-block;vertical-align: top;margin-right: 200px;">
-                    <img src="<?php echo $pImgPath;?>" width="350" height="350" class="boxshadow">
+                    <img src="<?php echo $pImgPath;?>" height="350" class="boxshadow" style="height: 350px;">
                     <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $item->getPName()." ".$item->getPSurname();?></h1>
                 </div>
                 <div style="display: inline-block;vertical-align: top;">
-                    <img src="<?php echo $dImgPath;?>" width="350" height="350" style="height: 350px;" class="boxshadow">
+                    <img src="<?php echo $dImgPath;?>" height="350" style="height: 350px;" class="boxshadow">
                     <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;">ห้องรับยา</h1>
                 </div>
             </div>
@@ -162,7 +162,7 @@ document.getElementById('suffix').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
 
-	//setTimeout(function(){ window.close(); }, 3000);
+	setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
 $(function(){
