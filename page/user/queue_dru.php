@@ -84,6 +84,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                         var dep_id = 0;
                         var hn_id = $('#search', this).val();
+
+                        // cut 00
+                        hn_id = "" + parseInt(hn_id);
+
                         var trQ = $('.que-tr[hn_id="'+ hn_id +'"]');
                         if(trQ.size()==0){
                             return;
@@ -122,6 +126,8 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                             e.preventDefault();
                             $('.remark-btn', trQ).click();
                         });
+
+                        $('.s-call-btn', sc).click();
 
                         $('#showScan').show();
                         $('#search', this).val('');
@@ -661,7 +667,7 @@ $(function(){
         var vn_id = tr.attr('vn_id');
         var name = $('.hn_name', tr).text();
         $.post('index.php?page=user/set_call_dru', {vn_id: vn_id}, function(data){}, 'json');
-        alert('Call: '+ name);
+        //alert('Call: '+ name);
         return;
 
 

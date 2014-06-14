@@ -5,6 +5,8 @@
  * Date: 6/5/14
  * Time: 10:24 AM
  */
+
+date_default_timezone_set('Asia/Bangkok');
 require_once 'bootstrap.php';
 
 //session_start();

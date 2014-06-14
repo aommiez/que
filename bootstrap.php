@@ -6,6 +6,8 @@
  * Time: 10:15 AM
  */
 
+date_default_timezone_set('Asia/Bangkok');
+
 require_once "vendor/autoload.php";
 require_once "lib/base.php";
 require_once "lib/Local.php";

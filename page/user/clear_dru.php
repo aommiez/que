@@ -6,8 +6,6 @@
  * Time: 4:17 PM
  */
 
-date_default_timezone_set('Asia/Bangkok');
-
 $minute = 30;
 if(isset($_GET['minute'])){
     $minute = $_GET['minute'];

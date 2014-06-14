@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Created by PhpStorm.
  * User: p2
@@ -65,8 +65,8 @@ while($time < $timeOut){
                     {$i}
                 </div>
                 <div class="span11 text-left"  style="padding: 5px 0;">
-                    <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
-                    <p style="font-size: 20px;">{$value['remark']}</p>
+                    <p style="font-size: 40px;"><strong>{$value['p_name']} {$value['p_surname']}</strong></p>
+                    <p style="font-size: 26px;">{$value['remark']}</p>
                     <p style="font-size: 14px;">เวลา : {$time}</p>
                 </div>
             </div>
