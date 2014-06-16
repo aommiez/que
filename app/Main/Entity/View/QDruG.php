@@ -23,6 +23,22 @@ class QDrug extends BaseEntity {
     protected $vn_id;
 
     /**
+     * @param mixed $ser
+     */
+    public function setSer($ser)
+    {
+        $this->ser = $ser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSer()
+    {
+        return $this->ser;
+    }
+
+    /**
      * @param mixed $vn_id
      */
     public function setVnId($vn_id)
