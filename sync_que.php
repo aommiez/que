@@ -80,6 +80,7 @@ foreach($items as $item){
         continue;
     }
     $que->setDru(true);
+    $que->setTimeDru($item->getTimedru());
     //$que->setHide(false);
 
     $em->merge($que);

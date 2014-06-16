@@ -37,6 +37,9 @@ class Que extends BaseEntity {
     /** @Column(type="time") */
     protected $time;
 
+    /** @Column(type="time") */
+    protected $time_dru;
+
     /** @Column(type="string") */
     protected $remark = "";
 
@@ -245,6 +248,22 @@ class Que extends BaseEntity {
     public function getTime()
     {
         return $this->time;
+    }
+
+    /**
+     * @param mixed $time_dru
+     */
+    public function setTimeDru($time_dru)
+    {
+        $this->time_dru = $time_dru;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimeDru()
+    {
+        return $this->time_dru;
     }
 
     /**
