@@ -74,7 +74,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
             <script type="text/javascript">
                 $(function(){
                     $('#form-scan').submit(function(){
-                        window.open('index.php?page=user/scan', '', 'width=100%, height=100%, top=0');
+                        //window.open('index.php?page=user/scan', '', 'width=100%, height=100%, top=0');
                     });
 
                     var sc = $('#showScan');
@@ -87,6 +87,14 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                         // cut 00
                         hn_id = "" + parseInt(hn_id);
+
+                        // scan and skip
+                        if(hn_id==99999999){
+                            $('.s-skip-btn', sc).click();
+                            $('#search', this).val('');
+                            sc.slideUp();
+                            return;
+                        }
 
                         var trQ = $('.que-tr[hn_id="'+ hn_id +'"]');
                         if(trQ.size()==0){
@@ -154,9 +162,9 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                         if ( (tag != 'input' && tag != 'textarea') || e.target.id=='search'){
                             if (e.which===117) {
                                 userAction('call');
-                            }else if(e.which===118){
+                            } else if (e.which===118) {
                                 userAction('skip');
-                            }else if (e.which===119) {
+                            } else if (e.which===119) {
                                 userAction('hide');
                             }
                         }
@@ -184,35 +192,55 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 });
 
             </script>
-            <audio id="sound1" controls style="display:none;">
+            <audio id="doorbell-1.wav" controls style="display:none;">
                 <source src="public/sounds/doorbell-1.wav" type="audio/wav">
             </audio>
-            <audio id="sound2" controls style="display:none;">
+            <audio id="doorbell-2.wav" controls style="display:none;">
                 <source src="public/sounds/doorbell-2.wav" type="audio/wav">
+            </audio>
+            <audio id="s2.wav" controls style="display:none;">
+                <source src="public/sounds/s2.wav" type="audio/wav">
+            </audio>
+            <audio id="s3.wav" controls style="display:none;">
+                <source src="public/sounds/s3.wav" type="audio/wav">
             </audio>
             <script type="text/javascript">
                 $(function(){
                     $('#ding-dong').click(function(){
-                        var sound = $('#soundInput').val();
+                        var sound = $('#doorbell').val();
                         document.getElementById(sound).play();
                     });
                 });
             </script>
-            <form id="form-scan" class="form form-horizontal validate-form" method="post" action="" style="margin: 0;">
-
+            <form id="form-scan" class="form form-horizontal validate-form" method="post" action="index.php?page=user/save_sound" style="margin: 0;">
+                <!--
                 <div class="control-group">
                     <div class="control-label">
                         <label><i class="icon-bell"></i></label>
                     </div>
                     <div class="controls">
-                        <select id="soundInput">
-                            <option value="sound1">เสียงกริ่งแบบที่ 1</option>
-                            <option value="sound2">เสียงกริ่งแบบที่ 2</option>
+                        <select id="doorbell" name="doorbell">
+                            <option value="doorbell-1.wav">เสียงกริ่งแบบที่ 1</option>
+                            <option value="doorbell-2.wav">เสียงกริ่งแบบที่ 2</option>
                         </select>
                         <button id="ding-dong" class="btn btn-success" name="button" type="button">กริ่ง</button>
                     </div>
                 </div>
+                -->
 
+                <div class="control-group">
+                    <div class="control-label">
+                        <label for="validation_secret">Suffix</label>
+                    </div>
+                    <div class="controls">
+                        <select id="suffix" name="suffix">
+                            <option value="s2.wav">ห้องรับยา 1</option>
+                            <option value="s3.wav">ห้องรับยา 2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!--
                 <div class="control-group">
                     <div class="control-label">
                         <label for="validation_secret">Prefix name</label>
@@ -241,6 +269,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                         <input class="span3" disabled="" id="full-name1" type="text" value="ด้วยค่ะ">
                     </div>
                 </div>
+                -->
 
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit">
@@ -348,12 +377,12 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 <div style="float:right">
                 <form method="get" style="display: inline-block;">
                     <input type="hidden" name="page" value="user/clear_dru">
-                    Skip รายชื่อที่อยุ่ในคิวนานกว่า
+                    Hide รายชื่อที่อยุ่ในคิวนานกว่า
                     <select name="minute">
                         <option value="30">30 นาที</option>
                         <option value="60">60 นาที</option>
                     </select>
-                    <button type="submit">Skip</button>
+                    <button type="submit">Hide</button>
                 </form>
                 </div>
             </div>
@@ -404,13 +433,13 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         vn_id="<?php echo $item['vn_id'];?>"
                                         hn_id="<?php echo $item['hn_id'];?>"
                                         dep_id="<?php echo $item['dep_id'];?>"
-                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time']->format('H:i:s');?>"
+                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time_dru']->format('H:i:s');?>"
                                         >
 
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
-                                        <td><?php echo $item['time']->format('H:i:s');?></td>
+                                        <td><?php echo $item['time_dru']->format('H:i:s');?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href="">
@@ -468,13 +497,13 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                         vn_id="<?php echo $item['vn_id'];?>"
                                         hn_id="<?php echo $item['hn_id'];?>"
                                         dep_id="<?php echo $item['dep_id'];?>"
-                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time']->format('H:i:s');?>"
+                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time_dru']->format('H:i:s');?>"
                                         >
 
                                         <td><input type="checkbox" name="id[]"></td>
                                         <td><?php echo $item['hn_id'];?></td>
                                         <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
-                                        <td><?php echo $item['time']->format('H:i:s');?></td>
+                                        <td><?php echo $item['time_dru']->format('H:i:s');?></td>
                                         <td>
                                             <div class='text-center'>
                                                 <a class='btn btn-success call-btn' href=''>
@@ -691,7 +720,7 @@ $(function(){
         tr.attr('dep_id', obj.dep_id);
 
         var date = obj.date.date.split(" ");
-        var time = obj.time.date.split(" ");
+        var time = obj.time_dru.date.split(" ");
         tr.attr('datetime', date[0]+ " " +time[1]);
 
         $('.hn_id', tr).text(obj.hn_id);

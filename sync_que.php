@@ -34,6 +34,7 @@ foreach($items as $item){
     $que->setVnId($item->getVnId());
     $que->setDate($item->getDate());
     $que->setTime(new DateTime($item->getTime().":00"));
+    $que->setTimeDru(new DateTime($item->getTime().":00"));
     $que->setHnId($item->getHnId());
     $que->setPName(tis620_to_utf8($item->getPName()));
     $que->setPSurname(tis620_to_utf8($item->getPSurname()));
@@ -80,12 +81,11 @@ foreach($items as $item){
         continue;
     }
     $que->setDru(true);
-    $que->setTimeDru($item->getTimedru());
+    $que->setTimeDru(new DateTime($item->getTimedru().":00"));
     //$que->setHide(false);
 
     $em->merge($que);
     $em->flush();
-
     $rs[] = $que->toArray();
 }
 echo json_encode($rs);

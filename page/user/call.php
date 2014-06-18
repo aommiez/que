@@ -19,13 +19,22 @@ if(!file_exists($dImgPath)){
     $dImgPath = "public/img/dep/hqdefault.jpg";
 }
 
+$doorbell_path = 'public/sounds/doorbell.wav';
+
+$suffix_path = 'public/sounds/suffix.wav?t='.time();
+
+/*
 $room = $em->getRepository('Main\Entity\Que\Dep')->findOneBy(array('id' => intval($item->getDepId()) ));
 $room_path = 'public/sounds/room/'.$item->getDepId().'.mp3';
 $room_name = $room->getGSpeak();
 if($item->getDru()){
     $room_name = 'รับยา';
     $room_path = 'drug';
+
+
 }
+*/
+/*
 $room_id = $item->getDepId();
 if (!is_file($room_path)) {
 	$scontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($room_name));
@@ -33,6 +42,7 @@ if (!is_file($room_path)) {
 	fwrite($fp, $scontent);
 	fclose($fp);
 }
+*/
 
 $first_name = $item->getPName();
 $firstname_path = 'public/sounds/firstname/'.$item->getVnId().'.mp3';
@@ -60,12 +70,13 @@ if (!is_file($lastname_path)) {
         background: url(public/img/patterns/4.png);
     }
 </style>
-<audio id="startCall" controls autoplay style="display:none;">
-    <source src="public/sounds/1.mp3" type="audio/mpeg">
+
+<audio id="startCall" controls style="display:none;">
+    <source src="<?php echo $doorbell_path;?>" type="audio/wav">
 </audio>
 
-<audio id="prefix1" controls  style="display:none;">
-  <source src="public/sounds/prefix1.mp3" type="audio/mpeg">
+<audio id="prefix1" controls autoplay  style="display:none;">
+  <source src="public/sounds/s1-2.wav" type="audio/wav">
 </audio>
 
 <audio id="firstname" controls style="display:none;">
@@ -76,17 +87,21 @@ if (!is_file($lastname_path)) {
   <source src="<?php echo $lastname_path; ?>" type="audio/mpeg">
 </audio>
 
+<!--
 <audio id="prefix2" controls style="display:none;">
-	<source src="public/sounds/prefix2.mp3" type="audio/mpeg">
+	<source src="public/sounds/prefix2.mp3" type="audio/wav">
 </audio>
+-->
 
 <audio id="room" controls style="display:none;">
-  <source src="<?php echo $room_path?>" type="audio/mpeg">
+  <source src="<?php echo $suffix_path?>" type="audio/mpeg">
 </audio>
 
+<!--
 <audio id="suffix" controls style="display:none;">
 	<source src="public/sounds/suffix.mp3" type="audio/mpeg">
 </audio>
+-->
 <style>
     .boxshadow {
         border-radius: 10px 10px 10px 10px;
@@ -120,13 +135,13 @@ if (!is_file($lastname_path)) {
 
 <script type="text/javascript">
 
-
+/*
 document.getElementById('startCall').addEventListener('ended', function(){
         this.currentTime = 0;
         this.pause();
         document.getElementById('prefix1').play();
 }, false);
-
+*/
 
 document.getElementById('prefix1').addEventListener('ended', function(){
 	this.currentTime = 0;
@@ -143,27 +158,31 @@ document.getElementById('firstname').addEventListener('ended', function(){
 document.getElementById('lastname').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	document.getElementById('prefix2').play();
+	document.getElementById('room').play();
 }, false);
- 
+ /*
 document.getElementById('prefix2').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
 	document.getElementById('room').play();
 }, false);
+*/
 
 document.getElementById('room').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	document.getElementById('suffix').play();
+	//document.getElementById('suffix').play();
+    setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
+/*
 document.getElementById('suffix').addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
 
 	setTimeout(function(){ window.close(); }, 3000);
 }, false);
+*/
 
 $(function(){
     /*

@@ -56,9 +56,9 @@ while($time < $timeOut){
             $i++;
             /** @var \Main\Entity\Que\Que $item */
             $value = $item->toArray();
-            $time = $value['time']->format("H:i");
+            $time = $value['time_dru']->format("H:i");
             $red_bg = empty($value['remark'])? "": "red-background-remark";
-            $datetime = $value['date']->format('D M d Y')." ".$value['time']->format('H:i:s');
+            $datetime = $value['date']->format('D M d Y')." ".$value['time_dru']->format('H:i:s');
 
             // count drug row
             $qb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
