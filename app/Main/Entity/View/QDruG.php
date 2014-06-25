@@ -22,6 +22,9 @@ class QDrug extends BaseEntity {
     /** @Column(type="integer") */
     protected $vn_id;
 
+    /** @Column(type="string") */
+    protected $time;
+
     /**
      * @param mixed $ser
      */
@@ -52,5 +55,21 @@ class QDrug extends BaseEntity {
     public function getVnId()
     {
         return $this->vn_id;
+    }
+
+    /**
+     * @param mixed $time
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
     }
 }

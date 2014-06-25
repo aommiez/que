@@ -13,15 +13,34 @@ $dt = new DateTime();
 $dt->sub(new DateInterval('PT45M'));
 
 $model = 'Main\Entity\Que\Que';
-$q = $em->createQuery("UPDATE {$model} a SET a.hide=1, a.updated_at=:updated_at WHERE a.time<=:time AND a.dru=0 AND a.hide=0");
-$q->setParameter('time', $dt->format('H:i:s'))
-    ->setParameter('updated_at', date('Y-m-d H:i:s'));
-$q->execute();
+$qb = $em->getRepository($model)->createQueryBuilder('a');
+$qb->where('a.time<=:time')
+    ->andWhere('a.dru=1')
+    ->andWhere('a.hide=0')
+    ->setParameter('time', $dt->format('H:i:s'));
 
-$model = 'Main\Entity\Que\Que';
-$q = $em->createQuery("UPDATE {$model} a SET a.hide=1, a.updated_at=:updated_at WHERE a.time_dru<=:time AND a.dru=1 AND a.hide=0");
-$q->setParameter('time', $dt->format('H:i:s'))
-    ->setParameter('updated_at', date('Y-m-d H:i:s'));
-$q->execute();
+$q = $qb->getQuery();
+$result = $q->getResult();
 
-echo json_encode(array('success'=> true));
+foreach($result as $q){
+    /** @var Main\Entity\Que\Que $q */
+    if($q->getHide()){
+        continue;
+    }
+
+    $param = $q->toArray();
+    $param['hide'] = true;
+
+    $q->setHide(true);
+    $em->merge($q);
+    $em->flush();
+
+    $json = json_encode(array('action'=> 'hide', 'param'=> $param));
+
+    $wsClient = new \Main\Socket\Client\WsClient($_SERVER['HTTP_HOST'], 8081);
+
+    echo $wsClient->sendData($json);
+
+    unset($wsClient);
+    unset($q);
+}

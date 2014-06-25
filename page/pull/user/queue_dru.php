@@ -6,10 +6,10 @@
  * Time: 11:43 PM
  */
 
-$timeOut = 20000000;
+$timeOut = 20;
 
 
-$rs = array('last_ts'=> $_POST['last_ts'], 'list'=> array());
+$rs = array('last_ts'=> (int)$_POST['last_ts'], 'list'=> array());
 $em = Local::getEM();
 
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
@@ -19,10 +19,14 @@ $qb->where('a.updated_at > :updated_at')
 
 $time = 0;
 while($time < $timeOut){
-    usleep(500000);
-    $time += 500000;
-    $items = $qb->getQuery()->getResult();
-    if(count($items)>0){
+    sleep(1);
+    $time += 1;
+
+    $fcache = 'que_dru.txt';
+    $chache_ts = file_get_contents($fcache);
+
+    if($chache_ts > $_POST['last_ts']){
+        $items = $qb->getQuery()->getResult();
         foreach($items as $item){
             /** @var Main\Entity\Que\Que $item */
             $rs['list'][] = $item->toArray();

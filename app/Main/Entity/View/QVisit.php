@@ -46,6 +46,25 @@ class QVisit extends BaseEntity {
     /** @Column(type="boolean") */
     protected $cas;
 
+    /** @Column(type="string") */
+    protected $pttype;
+
+    /**
+     * @param mixed $pttype
+     */
+    public function setPttype($pttype)
+    {
+        $this->pttype = $pttype;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPttype()
+    {
+        return $this->pttype;
+    }
+
     /**
      * @param mixed $date
      */

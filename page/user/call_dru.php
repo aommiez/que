@@ -2,7 +2,7 @@
 $em = Local::getEM();
 $vem = Local::getVEM();
 
-$item = $em->getRepository('Main\Entity\Que\Call')->find($_GET['id']);
+$item = $em->getRepository('Main\Entity\Que\CallDru')->find($_GET['id']);
 $que = $em->getRepository('Main\Entity\Que\Que')->findOneBy(array('vn_id' => $item->getVnId()));
 
 // image path
@@ -20,23 +20,25 @@ $suffix_path = $item->getSuffixPath();
 
 // name sound
 $first_name = $que->getPName();
-$firstname_path = 'public/sounds/firstname/'.$item->getVnId().'.mp3';
+$firstname_path = 'public/sounds/firstname/'.$que->getHnId().'.mp3';
 
 $last_name = $que->getPSurname();
-$lastname_path = 'public/sounds/lastname/'.$item->getVnId().'.mp3';
+$lastname_path = 'public/sounds/lastname/'.$que->getHnId().'.mp3';
 
 if (!is_file($firstname_path)) {
-    $fcontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($first_name));
-    $fp = fopen($firstname_path, 'w');
-    fwrite($fp, $fcontent);
-    fclose($fp);
+    $lang = preg_match('/[ก-๙]/i', $first_name)? 'th': 'en';
+	$fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($first_name));
+	$fp = fopen($firstname_path, 'w');
+	fwrite($fp, $fcontent);
+	fclose($fp);
 }
 
 if (!is_file($lastname_path)) {
-    $lcontent = file_get_contents('http://translate.google.com/translate_tts?tl=th&ie=UTF-8&q='.urlencode($last_name));
-    $fp = fopen($lastname_path, 'w');
-    fwrite($fp, $lcontent);
-    fclose($fp);
+    $lang = preg_match('/[ก-๙]/i', $last_name)? 'th': 'en';
+	$lcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($last_name));
+	$fp = fopen($lastname_path, 'w');
+	fwrite($fp, $lcontent);
+	fclose($fp);
 }
 
 ?>
@@ -47,19 +49,19 @@ if (!is_file($lastname_path)) {
 </style>
 
 <audio id="prefix1" controls autoplay  style="display:none;">
-    <source src="public/sounds/s1-2.wav" type="audio/wav">
+  <source src="public/sounds/s1-2.wav" type="audio/wav">
 </audio>
 
 <audio id="firstname" controls style="display:none;">
-    <source src="<?php echo $firstname_path; ?>" type="audio/mpeg">
+  <source src="<?php echo $firstname_path; ?>" type="audio/mpeg">
 </audio>
 
 <audio id="lastname" controls style="display:none;">
-    <source src="<?php echo $lastname_path; ?>" type="audio/mpeg">
+  <source src="<?php echo $lastname_path; ?>" type="audio/mpeg">
 </audio>
 
 <audio id="room" controls style="display:none;">
-    <source src="<?php echo $suffix_path?>" type="audio/mpeg">
+  <source src="<?php echo $suffix_path?>" type="audio/mpeg">
 </audio>
 
 <style>
@@ -86,7 +88,7 @@ if (!is_file($lastname_path)) {
                 </div>
                 <div style="display: inline-block;vertical-align: top;">
                     <img src="<?php echo $dImgPath;?>" height="350" style="height: 350px;" class="boxshadow">
-                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $item->getRoomName();?></h1>
+                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;">ห้องรับยา</h1>
                 </div>
             </div>
         </div>
@@ -95,45 +97,45 @@ if (!is_file($lastname_path)) {
 
 <script type="text/javascript">
 
-    document.getElementById('prefix1').addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        document.getElementById('firstname').play();
-    }, false);
+document.getElementById('prefix1').addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.pause();
+	document.getElementById('firstname').play();
+}, false);
 
-    document.getElementById('firstname').addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        document.getElementById('lastname').play();
-    }, false);
+document.getElementById('firstname').addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.pause();
+	document.getElementById('lastname').play();
+}, false);
 
-    document.getElementById('lastname').addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        document.getElementById('room').play();
-    }, false);
+document.getElementById('lastname').addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.pause();
+	document.getElementById('room').play();
+}, false);
 
-    document.getElementById('room').addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        //document.getElementById('suffix').play();
-        setTimeout(function(){ window.close(); }, 3000);
-    }, false);
+document.getElementById('room').addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.pause();
+	//document.getElementById('suffix').play();
+    setTimeout(function(){ window.close(); }, 3000);
+}, false);
 
-    $(function(){
-        /*
-         function requestFullscreen( element ) {
-         if ( element.requestFullscreen ) {
-         element.requestFullscreen();
-         } else if ( element.mozRequestFullScreen ) {
-         element.mozRequestFullScreen();
-         } else if ( element.webkitRequestFullScreen ) {
-         element.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
-         }
-         }
+$(function(){
+    /*
+    function requestFullscreen( element ) {
+        if ( element.requestFullscreen ) {
+            element.requestFullscreen();
+        } else if ( element.mozRequestFullScreen ) {
+            element.mozRequestFullScreen();
+        } else if ( element.webkitRequestFullScreen ) {
+            element.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+        }
+    }
 
-         requestFullscreen(document.body);
-         $(document.body).click();
-         */
-    });
+    requestFullscreen(document.body);
+    $(document.body).click();
+    */
+});
 </script>

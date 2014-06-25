@@ -30,6 +30,47 @@ class BaseEntityCall {
     /** @Column(type="integer") */
     protected $vn_id;
 
+    /** @Column(type="string") */
+    protected $suffix_path;
+
+    /** @Column(type="string") */
+    protected $room_path;
+
+    /** @Column(type="string") */
+    protected $room_name = "";
+
+    /**
+     * @param mixed $room_path
+     */
+    public function setRoomPath($room_path)
+    {
+        $this->room_path = $room_path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoomPath()
+    {
+        return $this->room_path;
+    }
+
+    /**
+     * @param mixed $suffix_path
+     */
+    public function setSuffixPath($suffix_path)
+    {
+        $this->suffix_path = $suffix_path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSuffixPath()
+    {
+        return $this->suffix_path;
+    }
+
     /**
      * @param mixed $id
      */
@@ -92,6 +133,22 @@ class BaseEntityCall {
     public function getVnId()
     {
         return $this->vn_id;
+    }
+
+    /**
+     * @param mixed $room_name
+     */
+    public function setRoomName($room_name)
+    {
+        $this->room_name = $room_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoomName()
+    {
+        return $this->room_name;
     }
 
     /** @PrePersist */

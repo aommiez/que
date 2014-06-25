@@ -41,7 +41,8 @@ if ($_page=='index') {
     OR $_page=='user/show'
     OR $_page=='user/show2'
     OR $_page=='user/show2_dru'
-	OR $_page=='user/call'
+    OR $_page=='user/call'
+    OR $_page=='user/call_dru'
 	OR $_page=='user/login'
 	OR $_page=='user/logout'){
 	View::render($_page, '_template_blank');

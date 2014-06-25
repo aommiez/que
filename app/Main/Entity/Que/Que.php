@@ -16,6 +16,9 @@ class Que extends BaseEntity {
     /** @Column(type="integer") */
     protected $vn_id;
 
+    /** @Column(type="string") */
+    protected $pt_type;
+
     /** @Column(type="integer") */
     protected $hn_id;
 
@@ -57,6 +60,9 @@ class Que extends BaseEntity {
 
     /** @Column(type="boolean") */
     protected $cas = false;
+
+    /** @Column(type="integer") */
+    protected $last_ser = 0;
 
     /**
      * @param mixed $cas
@@ -298,5 +304,35 @@ class Que extends BaseEntity {
         return $this->skip_dru;
     }
 
+    /**
+     * @param mixed $last_ser
+     */
+    public function setLastSer($last_ser)
+    {
+        $this->last_ser = $last_ser;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getLastSer()
+    {
+        return $this->last_ser;
+    }
+
+    /**
+     * @param mixed $pt_type
+     */
+    public function setPtType($pt_type)
+    {
+        $this->pt_type = $pt_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPtType()
+    {
+        return $this->pt_type;
+    }
 }

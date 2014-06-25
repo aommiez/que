@@ -17,27 +17,28 @@ $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb->select('count(a)')
     ->where('a.updated_at > :updated_at')
     ->andWhere('a.dru = 1')
-    ->setParameter('updated_at', date('Y-m-d H:i:s', $_POST['last_ts']));
+    ->setParameter('updated_at', date('Y-m-d H:i:s', $_GET['last_ts']));
 
 $qb2 = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb2->where('a.dru = 1')
     ->andWhere('a.skip_dru=0')
-    ->andWhere('a.hide=0');
-
+    ->andWhere('a.hide=0')
+    ->orderBy('a.time_dru');
 
 $res = array('update'=> false);
 $res['html'] = "";
-$res['last_ts'] = $_POST['last_ts'];
+$res['last_ts'] = $_GET['last_ts'];
 
 $html = "";
 
 $time = 0;
 $i = 0;
 while($time < $timeOut){
-    sleep(1);
-    $time += 1;
-    if($qb->getQuery()->getSingleScalarResult()==0)
+    if($qb->getQuery()->getSingleScalarResult()==0){
+        sleep(3);
+        $time += 3;
         continue;
+    }
 
     $items = $qb2->getQuery()->getResult();
 
@@ -48,7 +49,7 @@ while($time < $timeOut){
             $res['last_ts'] = $ts;
         }
 
-        if($item->getSkip()){
+        if($item->getSkipDru()){
             continue;
         }
 
@@ -61,12 +62,17 @@ while($time < $timeOut){
             $datetime = $value['date']->format('D M d Y')." ".$value['time_dru']->format('H:i:s');
 
             // count drug row
-            $qb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
-            $drug_count = $qb->select('count(a)')
-                ->where("a.vn_id=:vn_id")
-                ->setParameter('vn_id', $item->getVnId())
-                ->getQuery()
-                ->getSingleScalarResult();
+            try {
+                $qb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
+                $drug_count = $qb->select('count(a)')
+                    ->where("a.vn_id=:vn_id")
+                    ->setParameter('vn_id', $item->getVnId())
+                    ->getQuery()
+                    ->getSingleScalarResult();
+            }
+            catch(Exception $e){
+                $drug_count = 0;
+            }
 
             $res['html'] .= <<<HTML
             <div class="row-fluid {$red_bg} que-ctx"  datetime="{$datetime}" style="padding-top: 10px;">

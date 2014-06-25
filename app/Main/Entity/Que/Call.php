@@ -11,6 +11,6 @@ namespace Main\Entity\Que;
 
 /**
  * @Entity
- * @Table(name="call")
+ * @Table(name="call_que")
  */
 class Call extends BaseEntityCall {}

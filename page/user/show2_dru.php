@@ -15,7 +15,7 @@
 <div class="row-fluid dep-ctx">
     <div class="span12 box">
         <div class="box-header red-background">
-            <div class="title">
+            <div class="text-right title" style="float: right;">
                 <i class="icon-list"></i> รายชื่อคิว
             </div>
         </div>
@@ -27,7 +27,6 @@
 <script type="text/javascript">
 $(function(){
     var ctx = $('.dep-ctx');
-    var last_ts = 0;
 
     function fetchYellow(){
         $('.que-ctx').each(function(index, el){
@@ -44,40 +43,74 @@ $(function(){
     fetchYellow();
     setInterval(fetchYellow, 5000);
 
-    function pull(){
-        $.post('index.php?page=pull/show2_dru', {last_ts: last_ts}, function(data){
-            last_ts = data.last_ts;
-            if(data.update){
-                var html = data.html;
-                $('.box-content', ctx).html(html);
+    var callStack = {
+        stack: [],
+        calling: false,
+        push: function(data){
+            callStack.stack.push(data);
+        },
+        call: function(){
+            if(callStack.stack.length == 0){
+                callStack.calling = false;
+                return;
             }
-            fetchYellow();
-            pull();
-        }, 'json');
-    }
-    pull();
-});
-</script>
-<script type="text/javascript">
-$(function(){
-    var last_id = 'init';
-    function pull(){
-        $.post('index.php?page=pull/user/call_dru', {last_id: last_id}, function(data){
-            last_id = data.last_id;
-            if(data.call){
-                var params = [
-                    'height='+screen.height,
-                    'width='+screen.width,
-                    'left=0',
-                    'top=0'
-                    //'fullscreen=yes' // only works in IE, but here for completeness
-                ].join(',');
-                window.open('index.php?page=user/call&user_id='+data.call.vn_id+'&dru=yes', '', params);
-            }
-            pull();
-        }, 'json');
-    }
+            callStack.calling = true;
 
-    pull();
+            var data = callStack.stack.shift();
+
+            var params = [
+                'height='+screen.height,
+                'width='+screen.width,
+                'left=0',
+                'top=0'
+                //'fullscreen=yes' // only works in IE, but here for completeness
+            ].join(',');
+
+            var w = window.open('index.php?page=user/call_dru&id='+data.id, '', params);
+            w.onload = function(){
+                w.onunload = function(){
+                    callStack.call();
+                };
+            }
+        }
+    };
+
+    window.callstack = callStack;
+
+    var conn;
+    function skConnect(){
+        if(conn instanceof WebSocket){
+            conn.close();
+        }
+        conn = new WebSocket(<?php echo json_encode(url_socket());?>);
+
+        conn.onmessage = function(e){
+            var json = JSON.parse(e.data);
+            var event = json.event;
+            var data = json.data;
+
+            if(event=='call'){
+                callStack.push(data);
+                console.log(callStack);
+                if(!callStack.calling){
+                    callStack.call();
+                }
+            }
+            else if(event=='show/update'){
+                $('.box-content', ctx).html(data.html);
+                fetchYellow();
+            }
+        };
+
+        conn.onerror = function(){
+            setTimeout(function(){ skConnect(); }, 3000);
+        };
+
+        conn.onopen = function(){
+            conn.send(JSON.stringify({ action: 'show/init' }));
+        }
+    };
+
+    skConnect();
 });
 </script>

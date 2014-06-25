@@ -3,9 +3,9 @@ $em = Local::getEM();
 //$config = $em->getRepository('Main\Entity\Que\Config')->find($_GET['id']);
 $qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
 $qb->where('a.skip_dru=0')
-    ->andWhere('a.dru=1');
+    ->andWhere('a.dru=1')
+    ->orderBy('a.time_dru');
 
-$results = $qb->getQuery()->getResult();
 $results = $qb->getQuery()->getResult();
 
 $shows = array();
@@ -24,8 +24,6 @@ foreach($results as $q){
         $last_ts = $dt;
     }
 }
-
-$deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 ?>
 <style type="text/css">
 .table-striped tbody > tr:nth-child(odd) > td,
@@ -60,7 +58,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 </div>
 <div class="row-fluid">
 
-    <div class='span12 box box-collapsed'>
+    <div class='span12 box'>
         <div class="box-header red-background">
             <div class="title">
                 <i class='icon-volume-up'></i> Drug Room Sound Config
@@ -73,12 +71,8 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
         <div class="box-content">
             <script type="text/javascript">
                 $(function(){
-                    $('#form-scan').submit(function(){
-                        //window.open('index.php?page=user/scan', '', 'width=100%, height=100%, top=0');
-                    });
-
                     var sc = $('#showScan');
-
+                    var now_hn_id;
                     $('form#formScan').submit(function(e){
                         e.preventDefault();
 
@@ -86,7 +80,17 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                         var hn_id = $('#search', this).val();
 
                         // cut 00
-                        hn_id = "" + parseInt(hn_id);
+                        hn_id = +hn_id;
+                        hn_id = "" + hn_id;
+
+                        /*
+                        if(hn_id == now_hn_id){
+                            $('.s-call-btn', sc).click();
+                            return;
+                        }
+                        */
+
+                        now_hn_id = hn_id;
 
                         // scan and skip
                         if(hn_id==99999999){
@@ -120,14 +124,23 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                             $('.skip-btn', trQ).click();
                         });
 
+                        $('.hide-btn span').unbind('update-text');
                         $('.s-hide-btn', sc).unbind('click.hide').bind('click.hide', function(e){
                             e.preventDefault();
-                            $('.hide-btn', trQ).click();
+                            $('.hide-btn', trQ).click()
                         }).find('span').text($('.hide-btn', trQ).text());
+
+                        $('.hide-btn', trQ).find('span').bind('update-text', function(){
+                            $('.s-hide-btn span', sc).text($(this).text());
+                        });
 
                         $('.s-remark-input', sc).unbind('keyup.remark').bind('keyup.remark', function(e){
                             //e.preventDefault();
                             $('.remark-input', trQ).val($('.s-remark-input', sc).val());
+                            if(e.which==13){
+                                e.preventDefault();
+                                $('.s-remark-btn', sc).click();
+                            }
                         }).val($('.remark-input', trQ).val());
 
                         $('.s-remark-btn', sc).unbind('click.remark').bind('click.remark', function(e){
@@ -149,8 +162,6 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                         }
                     });
                     */
-
-
 
                     $(window).keydown(function(e) {
                         if (e.keyCode == 120) {
@@ -192,27 +203,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 });
 
             </script>
-            <audio id="doorbell-1.wav" controls style="display:none;">
-                <source src="public/sounds/doorbell-1.wav" type="audio/wav">
-            </audio>
-            <audio id="doorbell-2.wav" controls style="display:none;">
-                <source src="public/sounds/doorbell-2.wav" type="audio/wav">
-            </audio>
-            <audio id="s2.wav" controls style="display:none;">
-                <source src="public/sounds/s2.wav" type="audio/wav">
-            </audio>
-            <audio id="s3.wav" controls style="display:none;">
-                <source src="public/sounds/s3.wav" type="audio/wav">
-            </audio>
-            <script type="text/javascript">
-                $(function(){
-                    $('#ding-dong').click(function(){
-                        var sound = $('#doorbell').val();
-                        document.getElementById(sound).play();
-                    });
-                });
-            </script>
-            <form id="form-scan" class="form form-horizontal validate-form" method="post" action="index.php?page=user/save_sound" style="margin: 0;">
+            <form id="form-scan" class="form form-horizontal validate-form" method="post" style="margin: 0;">
                 <!--
                 <div class="control-group">
                     <div class="control-label">
@@ -234,8 +225,8 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                     </div>
                     <div class="controls">
                         <select id="suffix" name="suffix">
-                            <option value="s2.wav">ห้องรับยา 1</option>
-                            <option value="s3.wav">ห้องรับยา 2</option>
+                            <option value="2">ห้องรับยา 2</option>
+                            <option value="3">ห้องรับยา 3</option>
                         </select>
                     </div>
                 </div>
@@ -271,12 +262,14 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                 </div>
                 -->
 
+                <!--
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit">
                         <i class="icon-save"></i>
                         Save
                     </button>
                 </div>
+                -->
             </form>
         </div>
     </div>
@@ -330,8 +323,8 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                             <i class='icon-bullhorn'></i>
                             Call
                         </a>
-                        <a class='btn btn-large'>
-                            <i class='icon-mail-forward s-skip-btn'></i>
+                        <a class='btn btn-large s-skip-btn'>
+                            <i class='icon-mail-forward'></i>
                             Skip
                         </a>
                         <a class='btn btn-danger btn-large s-hide-btn'>
@@ -339,7 +332,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                             <span>Hide</span>
                         </a>
                         <input class="s-remark-input">
-                        <a class='btn btn-info remark-btn s-remark-btn'>
+                        <a class='btn btn-info s-remark-btn'>
                             <i class='icon-info'></i>
                             Save
                         </a>
@@ -375,10 +368,10 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 
                 <a class="btn" href="#" onclick="window.open('index.php?page=user/show2_dru', '', 'width=400, height='+screen.height);">เรียกหน้าต่างแสดงคิวแบบเล็ก</a>
                 <div style="float:right">
-                <form method="get" style="display: inline-block;">
+                <form class="hide-many-form" style="display: inline-block;">
                     <input type="hidden" name="page" value="user/clear_dru">
                     Hide รายชื่อที่อยุ่ในคิวนานกว่า
-                    <select name="minute">
+                    <select name="minute" id="hide-minute">
                         <option value="30">30 นาที</option>
                         <option value="60">60 นาที</option>
                     </select>
@@ -428,41 +421,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                     </tr>
                                     </thead>
                                     <tbody class="show-queue-list">
-                                    <?php foreach($shows as $item){?>
-                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background-remark";?>"
-                                        vn_id="<?php echo $item['vn_id'];?>"
-                                        hn_id="<?php echo $item['hn_id'];?>"
-                                        dep_id="<?php echo $item['dep_id'];?>"
-                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time_dru']->format('H:i:s');?>"
-                                        >
 
-                                        <td><input type="checkbox" name="id[]"></td>
-                                        <td><?php echo $item['hn_id'];?></td>
-                                        <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
-                                        <td><?php echo $item['time_dru']->format('H:i:s');?></td>
-                                        <td>
-                                            <div class='text-center'>
-                                                <a class='btn btn-success call-btn' href="">
-                                                    <i class='icon-bullhorn'></i>
-                                                    Call
-                                                </a>
-                                                <a class='btn skip-btn' href=''>
-                                                    <i class='icon-mail-forward'></i>
-                                                    Skip
-                                                </a>
-                                                <a class='btn btn-danger hide-btn' href=''>
-                                                    <i class='icon-remove'></i>
-                                                    <span>Hide</span>
-                                                </a>
-                                                <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
-                                                <a class='btn btn-info remark-btn' href=''>
-                                                    <i class='icon-info'></i>
-                                                    Save
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -492,41 +451,7 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
                                     </tr>
                                     </thead>
                                     <tbody class="hide-queue-list">
-                                    <?php foreach($hides as $item){?>
-                                    <tr class="que-tr <?php if(!empty($item['remark'])) echo "red-background";?>"
-                                        vn_id="<?php echo $item['vn_id'];?>"
-                                        hn_id="<?php echo $item['hn_id'];?>"
-                                        dep_id="<?php echo $item['dep_id'];?>"
-                                        datetime="<?php echo $item['date']->format('D M d Y')." ".$item['time_dru']->format('H:i:s');?>"
-                                        >
 
-                                        <td><input type="checkbox" name="id[]"></td>
-                                        <td><?php echo $item['hn_id'];?></td>
-                                        <td class="hn_name"><?php echo $item['p_name'];?> <?php echo $item['p_surname'];?></td>
-                                        <td><?php echo $item['time_dru']->format('H:i:s');?></td>
-                                        <td>
-                                            <div class='text-center'>
-                                                <a class='btn btn-success call-btn' href=''>
-                                                    <i class='icon-bullhorn'></i>
-                                                    Call
-                                                </a>
-                                                <a class='btn skip-btn' href=''>
-                                                    <i class='icon-mail-forward'></i>
-                                                    Skip
-                                                </a>
-                                                <a class='btn btn-danger hide-btn' href=''>
-                                                    <i class='icon-remove'></i>
-                                                    <span>Show</span>
-                                                </a>
-                                                <input type="text" placeholder="Remark" class="remark-input" value="<?php echo $item['remark'];?>">
-                                                <a class='btn btn-info remark-btn' href=''>
-                                                    <i class='icon-info'></i>
-                                                    Save
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -575,23 +500,20 @@ $deps = $em->getRepository('Main\Entity\Que\Dep')->findAll();
 </script>
 <script type="text/javascript">
 $(function(){
-    var last_ts = <?php echo $last_ts;?>;
+    var conn, last_ts = <?php echo $last_ts;?>;
     function clickSkip(e){
         e.preventDefault();
         var btn = $(this);
-        if(btn.prop('disabled')) return;
+        //if(btn.prop('disabled')) return;
         //if(!window.confirm('Skip?')) return;
 
-        btn.prop('disabled', true);
+        //btn.prop('disabled', true);
 
         var tr = btn.closest('tr.que-tr');
         var vn_id = tr.attr('vn_id');
-        $.post('index.php?page=user/skip_dru', {vn_id: vn_id}, function(data){
-            if(data.success){
-                skip(tr);
-            }
-            btn.prop('disabled', false);
-        }, 'json');
+
+        var param = { vn_id: vn_id };
+        conn.send(JSON.stringify({ action: 'skip', param: param }));
     }
 
     function skip(tr){
@@ -611,15 +533,15 @@ $(function(){
         var input = $('.remark-input', tr);
         var remarkString = input.val();
 
-        input.prop('disabled', true);
-        btn.prop('disabled', true);
-        $.post('index.php?page=user/remark', {vn_id: vn_id, remark: remarkString}, function(data){
-            if(data.success){
-                //remark(tr, remarkString);
-            }
-            btn.prop('disabled', false);
-            input.prop('disabled', false);
-        }, 'json');
+        var param = { vn_id: vn_id, remark: remarkString };
+        conn.send(JSON.stringify({ action: 'remark', param: param }));
+    }
+
+    function keyRemark(e){
+        if(e.which==13){
+            var tr = $(this).closest('tr.que-tr');
+            $('.remark-btn', tr).click();
+        }
     }
 
     function remark(tr, text){
@@ -641,75 +563,56 @@ $(function(){
 
         var tr = btn.closest('tr.que-tr');
         var vn_id = tr.attr('vn_id');
-        var isHide = $('span', btn).text()=='Show';
 
-        //if(!window.confirm('Hide?')) return;
-        btn.prop('disabled', true);
+        var isHide = $(this).closest('.table-hideuser').size()!=0;
 
-
-        $.post('index.php?page=user/hide', {vn_id: vn_id, hide: (!isHide)? 1: 0}, function(data){
-            if(data.success){
-                //hide(tr, data.hide);
-            }
-            btn.prop('disabled', false);
-        }, 'json');
+        var param = { vn_id: vn_id, hide: !isHide };
+        conn.send(JSON.stringify({ action: 'hide', param: param }));
     }
 
-    function hide(tr, isHide){
+    function hide(tr, hide){
         var vn_id = tr.attr('vn_id');
         var text = 'Hide';
         var table = $('.show-queue-list');
-        if(isHide) {
+        if(hide) {
             table = $('.hide-queue-list');
             text = 'Show';
         }
 
-        var trs = table.find('tr');
-        if(trs.size() == 0){
-            table.append(tr);
-            var btn = $('.hide-btn', tr);
-            $('span', btn).text(text);
-            return;
-        }
+        table.append(tr);
+        $('.hide-btn span', tr).text(text).trigger('update-text');
 
-        vn_id = parseInt(vn_id);
-        var i = 0;
-        trs.each(function(index, el){
-            i = index;
-            var $el = $(el);
-            if($el.attr('vn_id') < vn_id){
-                $el.before(tr);
-                return false;
-            }
-        });
-
-        if(i == trs.size()-1){
-            trs.last().after(tr);
-        }
-        $('.hide-btn span', tr).text(text);
+        sortQue(table);
     }
 
+    function hideMany(data){
+        for(var i in data){
+            (function(){
+                var tr = $('tr[vn_id="'+data[i].vn_id+'"]');
+                hide(tr, data[i].hide);
+            }());
+        }
+    }
+
+    var suffix = $('#suffix');
     function clickCall(e){
         e.preventDefault();
 
         var tr = $(this).closest('tr.que-tr');
         var vn_id = tr.attr('vn_id');
-        var name = $('.hn_name', tr).text();
-        $.post('index.php?page=user/set_call_dru', {vn_id: vn_id}, function(data){}, 'json');
-        //alert('Call: '+ name);
-        return;
 
+        var suffix_path, room_path;
+        if(suffix.val() == 2){
+            suffix_path = 'public/sounds/suffix/s2.wav';
+            room_path = 'public/img/dru/2.jpg';
+        }
+        else if(suffix.val() == 3){
+            suffix_path = 'public/sounds/suffix/s3.wav';
+            room_path = 'public/img/dru/3.jpg';
+        }
 
-        var tr = $(this).closest('.que-tr');
-        var vn_id = tr.attr('vn_id');
-        var params = [
-            'height='+screen.height,
-            'width='+screen.width,
-            'left=0',
-            'top=0'
-            //'fullscreen=yes' // only works in IE, but here for completeness
-        ].join(',');
-        window.open('index.php?page=user/call&user_id='+vn_id+'&dru=yes', '', params);
+        var param = {vn_id: vn_id, room_path: room_path, suffix_path: suffix_path};
+        conn.send(JSON.stringify({ action: 'call', param: param }));
     }
 
     function createTr(obj){
@@ -723,69 +626,107 @@ $(function(){
         var time = obj.time_dru.date.split(" ");
         tr.attr('datetime', date[0]+ " " +time[1]);
 
+        var hideText = obj.hide==true? 'Show': 'Hide';
+
         $('.hn_id', tr).text(obj.hn_id);
         $('.name', tr).text(obj.p_name + ' ' + obj.p_surname);
         $('.time', tr).text(time[1]);
-        $('.remark-input', tr).val(obj.remark);
+        $('.hide-btn span', tr).text(hideText);
+        //$('.remark-input', tr).val(obj.remark);
+
+        remark(tr, obj.remark);
 
         $('.skip-btn', tr).click(clickSkip);
         $('.remark-btn', tr).click(clickRemark);
+        $('.remark-input', tr).keypress(keyRemark);
         $('.hide-btn', tr).click(clickHide);
         $('.call-btn', tr).click(clickCall);
 
         return tr;
     }
 
-    function pull(){
-        $.post('index.php?page=pull/user/queue_dru', {last_ts: last_ts}, function(data){
-            last_ts = data.last_ts;
-            $(data.list).each(function(i, obj){
-                var tr =  $('tr[vn_id="'+obj.vn_id+'"]');
-
-                if(tr.size()==0 && obj.skip_dru==false){
-                    tr = createTr(obj);
-                    if(obj.hide){
-                        $('.table-hideuser tbody').append(tr);
-                    }
-                    else {
-                        $('.table-showuser tbody').append(tr);
-                    }
-                    return;
-                }
-
-                if(tr.size()==0){
-                    return;
-                }
-
-                if(obj.skip_dru==1){
-                    skip(tr);
-                    return;
-                }
-
-                var remarkInput = $('.remark-input', tr);
-                if(remarkInput.val() != obj.remark){
-                    remark(tr, obj.remark);
-                }
-
-                var isHide = $('.hide-btn span', tr).text()=='Show';
-                if(isHide != obj.hide){
-                    hide(tr, obj.hide);
-                }
-            });
-            pull();
-        }, 'json');
+    function addMany(data){
+        for(var i in data){
+            (function(){
+                var tr = createTr(data[i]);
+                var table = data[i].hide? $('.hide-queue-list'): $('.show-queue-list');
+                table.append(tr);
+            }());
+        }
+        sortQue('.show-queue-list');
+        sortQue('.hide-queue-list');
     }
 
-    pull();
+    function sortQue(selector){
+        var table = $(selector);
+        table.append($("tr", table).get().sort(function(a, b) {
+            var dt1 = new Date($(a).attr("datetime"));
+            var dt2 = new Date($(b).attr("datetime"));
+
+            return dt1.getTime() - dt2.getTime();
+        }));
+    }
+
+    function skConnect(){
+        if(conn instanceof WebSocket){
+            conn.close();
+        }
+        conn = new WebSocket(<?php echo json_encode(url_socket());?>);
+
+        conn.onmessage = function(e){
+            var json = JSON.parse(e.data);
+            var event = json.event;
+            var data = json.data;
+
+            var vn_id = typeof data.vn_id == 'undefined'? 0: data.vn_id;
+
+            var tr = $('tr[vn_id="'+vn_id+'"]');
+            if(event=='skip'){
+                skip(tr);
+            }
+            else if(event=='remark'){
+                remark(tr, data.remark);
+            }
+            else if(event=='hide'){
+                hide(tr, data.hide);
+            }
+            else if(event=='add'){
+                addMany(data);
+            }
+            else if(event =='init'){
+                addMany(data);
+                fetchYellow();
+            }
+            else if(event =='hideMany'){
+                hideMany(data);
+            }
+        };
+
+        conn.onerror = function(){
+            setTimeout(function(){ skConnect(); }, 3000);
+        };
+
+        conn.onopen = function(){
+            $('.show-queue-list tr').remove();
+            $('.hide-queue-list tr').remove();
+            conn.send(JSON.stringify({ action: 'init' }));
+        }
+    };
+
+    skConnect();
 
     $('.skip-btn').click(clickSkip);
     $('.remark-btn').click(clickRemark);
+    $('.remark-input').keypress(keyRemark);
     $('.hide-btn').click(clickHide);
     $('.call-btn').click(clickCall);
-});
-</script>
-<script type="text/javascript">
-$(function(){
+    $('.hide-many-form').submit(function(e){
+        e.preventDefault();
+        var minute = $('#hide-minute').val();
+        conn.send(JSON.stringify({ action: 'hideMany', param: { minute: minute } }));
+    });
+
+    // fetch yellow function every 5 secound
     function fetchYellow(){
         $('tr.que-tr').each(function(){
             var datetime = $(this).attr('datetime');

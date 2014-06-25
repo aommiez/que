@@ -14,15 +14,14 @@ $last_id = $_GET['last_id'];
 $em = Local::getEM();
 
 if($last_id == 'init'){
-    $qb = $em->getRepository('Main\Entity\Que\CallDru')->createQueryBuilder('a');
+    $qb = $em->getRepository('Main\Entity\Que\Call')->createQueryBuilder('a');
     $qb->select('max(a.id)');
 
     echo json_encode(array('last_id'=> $qb->getQuery()->getSingleScalarResult(), 'call'=> false));
     exit();
 }
 
-
-$qb = $em->getRepository('Main\Entity\Que\CallDru')->createQueryBuilder('a');
+$qb = $em->getRepository('Main\Entity\Que\Call')->createQueryBuilder('a');
 $qb->where('a.id>:id')->setParameter('id', $last_id)->setMaxResults(1);
 
 $time = 0;

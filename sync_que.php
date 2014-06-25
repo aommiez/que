@@ -40,8 +40,9 @@ foreach($items as $item){
     $que->setPSurname(tis620_to_utf8($item->getPSurname()));
     $que->setDepId(tis620_to_utf8($item->getDepId()));
     $que->setDepName(tis620_to_utf8($item->getDepName()));
-    $que->setDru($item->getDru());
+    $que->setDru(false);
     $que->setCas($item->getCas());
+    $que->setPtType($item->getPttype());
 
     $em->persist($que);
     $em->flush();
@@ -55,37 +56,74 @@ foreach($items as $item){
         unset($pImg);
     }
 
+    // download mp3 name,surname
+    $lang = 'th';
+    if(!preg_match('/[ก-๙]/i', $que->getPName())){
+        $lang = 'en';
+    }
+    $fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($que->getPName()));
+    $fp = fopen("public/sounds/firstname/".$que->getHnId().".mp3", 'w');
+    fwrite($fp, $fcontent);
+    fclose($fp);
+
+    $lang = 'th';
+    if(!preg_match('/[ก-๙]/i', $que->getPSurname())){
+        $lang = 'en';
+    }
+    $fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($que->getPSurname()));
+    $fp = fopen("public/sounds/lastname/".$que->getHnId().".mp3", 'w');
+    fwrite($fp, $fcontent);
+    fclose($fp);
+
     $rs[] = $que->toArray();
 }
-echo json_encode($rs);
 
 $dru_qb = $em->getRepository('Main\Entity\Que\Que')->createQueryBuilder('a');
-$dru_qb->select('max(a.vn_id)')->where('a.dru=1');
+$dru_qb->select('max(a.last_ser)')->where('a.dru=1');
 
-$dru_max_vn_id = $dru_qb->getQuery()->getSingleScalarResult();
-$dru_max_vn_id = (int)$dru_max_vn_id;
+$last_ser = $dru_qb->getQuery()->getSingleScalarResult();
+$last_ser = (int)$last_ser;
 
-$dru_vqb = $vem->getRepository('Main\Entity\View\QDru')->createQueryBuilder('a');
-$dru_vqb
-    ->where('a.vn_id>:vn_id')
-    ->andWhere($dru_qb->expr()->isNotNull('a.timedru'))
-    ->setParameter('vn_id', $dru_max_vn_id);
+$drug_vqb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
+$drug_vqb
+    ->where('a.ser>:last_ser')
+    ->setParameter('last_ser', $last_ser);
 
-$items = $dru_vqb->getQuery()->getResult();
+$items = $drug_vqb->getQuery()->getResult();
 $rs = array();
+$add = array();
 foreach($items as $item){
-    /** @var Main\Entity\View\QDru $item */
+    /** @var Main\Entity\View\QDrug $item */
 
     $que = $em->getRepository('Main\Entity\Que\Que')->findOneBy(array('vn_id'=> $item->getVnId()));
     if(is_null($que)){
         continue;
     }
+    // new dru set true
+    $isNew = !$que->getDru();
+
     $que->setDru(true);
-    $que->setTimeDru(new DateTime($item->getTimedru().":00"));
+    $que->setTimeDru(new DateTime($item->getTime().":00"));
+    $que->setLastSer($item->getSer());
     //$que->setHide(false);
 
     $em->merge($que);
     $em->flush();
     $rs[] = $que->toArray();
+
+    // new dru array add
+    if($isNew){
+        $add[] = $que->toArray();
+    }
 }
-echo json_encode($rs);
+
+if(count($add) > 0){
+    $wsClient = new \Main\Socket\Client\WsClient($_SERVER['HTTP_HOST'], 8081);
+
+    $json = json_encode(array(
+        'action'=> 'add',
+        'param'=> $add
+    ));
+    echo $wsClient->sendData($json);
+    unset($wsClient);
+}

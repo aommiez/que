@@ -26,3 +26,11 @@ function tis620_to_utf8($text) {
     }
     return $utf8;
 }
+
+function url_server() {
+
+}
+
+function url_socket() {
+    return 'ws://'.gethostname().':8081';
+}
