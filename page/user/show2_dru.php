@@ -16,17 +16,23 @@
 </style>
 <div class="row-fluid dep-ctx">
     <div class="span12 box">
-        <div class="box-header red-background" style="font-size: 30px;
+        <div class="box-header red-background" style="font-size: 26px;
     font-weight: 200;
     line-height: 50px;
     padding: 10px 15px;
     height: 50px;">
             <div class="text-right title">
-                <i class="icon-list"></i> รายชื่อคิว
+                <i class="icon-list"></i> รายชื่อคิว : <span id="time"></span>
             </div>
             <div class="pull-right">
                 รายการยา
             </div>
+        </div>
+        <div style="text-align: center;">
+            <img src="public/img/support/moph_logo.png" style="width: 60px;">
+            <img src="public/img/support/NSTDA.png" style="width: 124px;">
+            <img src="public/img/support/oy.png" style="width: 96px;">
+            <img src="public/img/support/sscm.png" style="width: 74px;">
         </div>
         <div class="box-content" style="padding:0px;">
 
@@ -35,6 +41,14 @@
 </div>
 <script type="text/javascript">
 $(function(){
+    function date() {
+        var now = new Date(),
+            now = now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
+        $('#time').html(now);
+    }
+    date();
+    setInterval(date, 1000);
+
     var ctx = $('.dep-ctx');
 
     function fetchYellow(){
