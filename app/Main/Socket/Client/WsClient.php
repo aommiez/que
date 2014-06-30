@@ -42,7 +42,7 @@ class WsClient
         $header.= "Upgrade: WebSocket\r\n";
         $header.= "Connection: Upgrade\r\n";
         $header.= "Host: ".$host.":".$port."\r\n";
-        $header.= "Origin: http://".$_SERVER['HTTP_HOST']."\r\n";
+        //$header.= "Origin: http://".$_SERVER['HTTP_HOST']."\r\n";
         $header.= "Sec-WebSocket-Key1: " . $key1 . "\r\n";
         $header.= "Sec-WebSocket-Key2: " . $key2 . "\r\n";
         $header.= "\r\n";

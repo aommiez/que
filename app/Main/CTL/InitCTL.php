@@ -32,6 +32,8 @@ class InitCTL extends BaseCTL {
             unset($q);
         }
         $query->free();
+        unset($query);
+        unset($results);
         unset($qb);
         return $items;
     }

@@ -37,10 +37,7 @@ foreach($result as $q){
 
     $json = json_encode(array('action'=> 'hide', 'param'=> $param));
 
-    $wsClient = new \Main\Socket\Client\WsClient($_SERVER['HTTP_HOST'], 8081);
+    $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
 
     echo $wsClient->sendData($json);
-
-    unset($wsClient);
-    unset($q);
 }

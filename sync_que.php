@@ -118,7 +118,7 @@ foreach($items as $item){
 }
 
 if(count($add) > 0){
-    $wsClient = new \Main\Socket\Client\WsClient($_SERVER['HTTP_HOST'], 8081);
+    $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
 
     $json = json_encode(array(
         'action'=> 'add',

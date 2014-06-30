@@ -50,6 +50,8 @@ class QueDru implements MessageComponentInterface {
         $this->clients->detach($conn);
 
         echo "Connection {$conn->resourceId} has disconnected\n";
+        unset($conn);
+
         flush();
     }
 
@@ -105,6 +107,11 @@ class QueDru implements MessageComponentInterface {
         }
         unset($json);
         unset($param);
+
+        \Local::getEM()->clear();
+        \Local::getVEM()->clear();
+
+        echo memory_get_usage().','.memory_get_usage(true)."\n";
     }
 
     public function showUpdate(ConnectionInterface $form = null){
@@ -116,8 +123,10 @@ class QueDru implements MessageComponentInterface {
         else {
             $json = json_encode(array('event'=> 'show/update', 'data'=> $data));
             $form->send($json);
-            unset($data);
+            unset($json);
         }
+        unset($data);
+        unset($ctl);
     }
 
     // init action
@@ -210,6 +219,7 @@ class QueDru implements MessageComponentInterface {
             unset($data);
         }
         unset($ctl);
+        unset($param);
 
         $this->showUpdate();
     }

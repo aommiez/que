@@ -36,6 +36,7 @@ class ShowCTL extends BaseCTL {
 
                 // count drug row
                 try {
+                    throw new \Exception();
                     $qb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
                     $drug_count = $qb->select('count(a)')
                         ->where("a.vn_id=:vn_id")
@@ -54,7 +55,7 @@ class ShowCTL extends BaseCTL {
                 {$i}
             </div>
             <div class="span11 text-left"  style="padding: 5px 0;">
-                <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']} ({$drug_count})</strong></p>
+                <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']} <span class="pull-right" style="padding: 0 10px 0 0;">({$drug_count})</span></strong></p>
                 <p style="font-size: 20px;">{$value['remark']}</p>
                 <p style="font-size: 14px;">เวลา : {$time}</p>
             </div>

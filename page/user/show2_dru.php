@@ -15,8 +15,11 @@
 <div class="row-fluid dep-ctx">
     <div class="span12 box">
         <div class="box-header red-background">
-            <div class="text-right title" style="float: right;">
+            <div class="text-right title">
                 <i class="icon-list"></i> รายชื่อคิว
+            </div>
+            <div class="pull-right">
+                รายการยา
             </div>
         </div>
         <div class="box-content" style="padding:0px;">
@@ -66,16 +69,22 @@ $(function(){
                 //'fullscreen=yes' // only works in IE, but here for completeness
             ].join(',');
 
-            var w = window.open('index.php?page=user/call_dru&id='+data.id, '', params);
-            w.onload = function(){
-                w.onunload = function(){
-                    callStack.call();
-                };
-            }
+            var href = 'index.php?page=user/call_dru&id='+data.id;
+            var w = window.open(href, '', params);
+
+            var interval = window.setInterval(function() {
+                try {
+                    if (w == null || w.closed) {
+                        window.clearInterval(interval);
+                        callStack.call();
+                    }
+                }
+                catch (e) {
+                    alert('error');
+                }
+            }, 100);
         }
     };
-
-    window.callstack = callStack;
 
     var conn;
     function skConnect(){
