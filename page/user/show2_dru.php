@@ -11,10 +11,16 @@
     border-bottom-width: 3px;
     border-bottom-style: solid;
 }
+
+
 </style>
 <div class="row-fluid dep-ctx">
     <div class="span12 box">
-        <div class="box-header red-background">
+        <div class="box-header red-background" style="font-size: 30px;
+    font-weight: 200;
+    line-height: 50px;
+    padding: 10px 15px;
+    height: 50px;">
             <div class="text-right title">
                 <i class="icon-list"></i> รายชื่อคิว
             </div>

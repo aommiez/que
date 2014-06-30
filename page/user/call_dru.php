@@ -87,7 +87,7 @@ if (!is_file($lastname_path)) {
                     <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $que->getPName()." ".$que->getPSurname();?></h1>
                 </div>
                 <div style="display: inline-block;vertical-align: top;">
-                    <img src="<?php echo $dImgPath;?>" height="350" style="height: 350px;" class="boxshadow">
+                    <img src="<?php echo $dImgPath;?>" height="450" style="height: 450px;" class="boxshadow">
                     <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;">ห้องรับยา</h1>
                 </div>
             </div>

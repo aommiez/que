@@ -36,7 +36,7 @@ class ShowCTL extends BaseCTL {
 
                 // count drug row
                 try {
-                    throw new \Exception();
+                    //throw new \Exception();
                     $qb = $vem->getRepository('Main\Entity\View\QDrug')->createQueryBuilder('a');
                     $drug_count = $qb->select('count(a)')
                         ->where("a.vn_id=:vn_id")
@@ -50,14 +50,14 @@ class ShowCTL extends BaseCTL {
 
                 $res['html'] .= <<<HTML
         <div class="row-fluid {$red_bg} que-ctx"  datetime="{$datetime}" style="padding-top: 10px;">
-            <div class="span1" style="padding: 10px 0 0 10px; font-size: 24px;">
+            <div class="span1" style="padding: 10px 0 0 10px; font-size: 28px;">
                 <!--<img src="http://placehold.it/100x100" >-->
                 {$i}
             </div>
             <div class="span11 text-left"  style="padding: 5px 0;">
-                <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']} <span class="pull-right" style="padding: 0 10px 0 0;">({$drug_count})</span></strong></p>
+                <p style="font-size: 30px;"><strong>{$value['p_name']} {$value['p_surname']} <span class="pull-right" style="padding: 0 10px 0 0;">({$drug_count})</span></strong></p>
                 <p style="font-size: 20px;">{$value['remark']}</p>
-                <p style="font-size: 14px;">เวลา : {$time}</p>
+                <p style="font-size: 18px;">เวลาที่แพทย์ตรวจเสร็จ : {$time}</p>
             </div>
         </div>
 HTML;
