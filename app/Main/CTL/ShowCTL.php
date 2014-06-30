@@ -49,7 +49,14 @@ class ShowCTL extends BaseCTL {
                 }
 
                 $res['html'] .= <<<HTML
-        <div class="row-fluid {$red_bg} que-ctx"  datetime="{$datetime}" style="padding-top: 10px;">
+        <style>
+        .normal-bg {
+        border-bottom-color: #f3f3f3;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+        }
+        </style>
+        <div class="row-fluid {$red_bg} que-ctx normal-bg"  datetime="{$datetime}" style="padding-top: 10px;">
             <div class="span1" style="padding: 10px 0 0 10px; font-size: 28px;">
                 <!--<img src="http://placehold.it/100x100" >-->
                 {$i}
