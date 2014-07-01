@@ -81,9 +81,9 @@ while($time < $timeOut){
                     {$i}
                 </div>
                 <div class="span11 text-left"  style="padding: 5px 0;">
-                    <p style="font-size: 24px;"><strong>{$value['p_name']} {$value['p_surname']} ({$drug_count})</strong></p>
+                    <p style="font-size: 30px;"><strong>{$value['p_name']} {$value['p_surname']} ({$drug_count})</strong></p>
                     <p style="font-size: 20px;">{$value['remark']}</p>
-                    <p style="font-size: 14px;">เวลา : {$time}</p>
+                    <p style="font-size: 14px;">เวลาที่แพทย์ตรวจเสร็จ : {$time}</p>
                 </div>
             </div>
 HTML;
