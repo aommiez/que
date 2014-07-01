@@ -48,7 +48,7 @@ foreach($items as $item){
     $em->flush();
 
     $imgPath = 'public/img/users/'.$item->getHnId().'.bmp';
-    if(!file_exists($imgPath)){
+    if(!file_exists($imgPath) || filesize($imgPath) == 0){
         $pImg = $vem->getRepository('Main\Entity\View\PImage')->findOneBy(array('hn_id'=> $item->getHnId()));
         if(!is_null($pImg->getImage())){
             file_put_contents($imgPath, $pImg->getImage());

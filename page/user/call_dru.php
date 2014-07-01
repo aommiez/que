@@ -25,7 +25,7 @@ $firstname_path = 'public/sounds/firstname/'.$que->getHnId().'.mp3';
 $last_name = $que->getPSurname();
 $lastname_path = 'public/sounds/lastname/'.$que->getHnId().'.mp3';
 
-if (!is_file($firstname_path)) {
+if (!file_exists($firstname_path) || filesize($firstname_path) == 0) {
     $lang = preg_match('/[ก-๙]/i', $first_name)? 'th': 'en';
 	$fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($first_name));
 	$fp = fopen($firstname_path, 'w');
@@ -33,7 +33,7 @@ if (!is_file($firstname_path)) {
 	fclose($fp);
 }
 
-if (!is_file($lastname_path)) {
+if (!file_exists($lastname_path) || filesize($lastname_path) == 0) {
     $lang = preg_match('/[ก-๙]/i', $last_name)? 'th': 'en';
 	$lcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($last_name));
 	$fp = fopen($lastname_path, 'w');
