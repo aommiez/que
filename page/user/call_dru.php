@@ -1,4 +1,9 @@
 <?php
+echo <<<HTML
+<script type="text/javascript">
+setTimeout(function(){ window.close(); }, 15000);
+</script>
+HTML;
 $em = Local::getEM();
 $vem = Local::getVEM();
 
