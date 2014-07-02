@@ -21,21 +21,25 @@ $suffix_path = $item->getSuffixPath();
 // name sound
 $first_name = $que->getPName();
 $firstname_path = 'public/sounds/firstname/'.$que->getHnId().'.mp3';
+// $firstname_path = 'public/sounds/firstname/0000.mp3';
 
 $last_name = $que->getPSurname();
 $lastname_path = 'public/sounds/lastname/'.$que->getHnId().'.mp3';
+// $lastname_path = 'public/sounds/lastname/0000.mp3';
 
-if (!file_exists($firstname_path) || filesize($firstname_path) == 0) {
+$firstname_len = file_get_contents($firstname_path);
+if (!is_file($firstname_path) || strlen($firstname_len)===0) {
     $lang = preg_match('/[ก-๙]/i', $first_name)? 'th': 'en';
-	$fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($first_name));
+	$fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode(trim($first_name)));
 	$fp = fopen($firstname_path, 'w');
 	fwrite($fp, $fcontent);
 	fclose($fp);
 }
 
-if (!file_exists($lastname_path) || filesize($lastname_path) == 0) {
+$lastname_len = file_get_contents($lastname_path);
+if (!is_file($lastname_path) || strlen($lastname_len)===0) {
     $lang = preg_match('/[ก-๙]/i', $last_name)? 'th': 'en';
-	$lcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($last_name));
+	$lcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode(trim($last_name)));
 	$fp = fopen($lastname_path, 'w');
 	fwrite($fp, $lcontent);
 	fclose($fp);
@@ -48,7 +52,7 @@ if (!file_exists($lastname_path) || filesize($lastname_path) == 0) {
     }
 </style>
 
-<audio id="prefix1" controls autoplay  style="display:none;">
+<audio id="prefix1" controls autoplay style="display:none;">
   <source src="public/sounds/s1-2.wav" type="audio/wav">
 </audio>
 
@@ -96,29 +100,47 @@ if (!file_exists($lastname_path) || filesize($lastname_path) == 0) {
 </div>
 
 <script type="text/javascript">
+var prefix1 = document.getElementById('prefix1');
+var firstname = document.getElementById('firstname');
+var lastname = document.getElementById('lastname');
+var room = document.getElementById('room');
 
-document.getElementById('prefix1').addEventListener('ended', function(){
+prefix1.addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	document.getElementById('firstname').play();
+	firstname.play();
 }, false);
 
-document.getElementById('firstname').addEventListener('ended', function(){
+firstname.addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	document.getElementById('lastname').play();
+	lastname.play();
 }, false);
+firstname.addEventListener('error', function failed(e){
+    prefix1.addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        lastname.play();
+    }, false);
+}, true);
 
-document.getElementById('lastname').addEventListener('ended', function(){
+lastname.addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	document.getElementById('room').play();
+	room.play();
 }, false);
+lastname.addEventListener('error', function failed(e){
+    // room.play();
+    firstname.addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        room.play();
+    }, false);
+}, true);
 
-document.getElementById('room').addEventListener('ended', function(){
+room.addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.pause();
-	//document.getElementById('suffix').play();
     setTimeout(function(){ window.close(); }, 3000);
 }, false);
 
