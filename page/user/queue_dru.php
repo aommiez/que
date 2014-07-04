@@ -102,6 +102,8 @@ foreach($results as $q){
 
                         var trQ = $('.que-tr[hn_id="'+ hn_id +'"]');
                         if(trQ.size()==0){
+                            $('#search', this).val('');
+                            sc.slideUp();
                             return;
                         }
 
